@@ -1,0 +1,91 @@
+.class-sidebar {
+    width: 280px;
+    height: 100vh;
+    background-color: var(--main-bg);
+}
+
+.frame-sidebar {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.logo {
+    display: flex;
+    justify-content: flex-center;
+    align-items: center;
+    width: 100%;
+}
+
+.logo span{
+    font-size: var(--fs-2lg);
+    font-weight: 600;
+    color: var(--main-major);
+}
+
+.di-clojure-alt {
+    color: var(--main-major);
+    margin: 0rem;
+}
+
+.nav-link{
+    overflow: hidden;
+    transition: ease-in-out 0.2s;
+    color: #acabab;
+}
+
+.nav-link.active{
+    color: var(--main-major);
+}
+
+.nav-link:hover{
+    background-color: var(--main-major);
+    color: var(--main-bg);
+}
+
+.nav-link.active:hover{
+    color: var(--main-major);
+}
+
+.frame-sidebar .class-nav-links {
+    margin-top: var(--spacing-md);
+    width: 100%;
+    position: relative;
+    height: auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: hidden;
+}
+
+.class-nav-links .class-nav-link{
+    display: flex;
+    position: absolute;
+    left:  var(--spacing-sm);
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-start;
+    overflow: hidden;
+    gap: var(--spacing-xs);
+}
+
+.class-nav-links .nav-link {
+    padding: var(--spacing-xs);
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    gap: var(--spacing-xs);
+    height: 60px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 768px) {
+    .class-sidebar {
+        display: none;
+    }
+}

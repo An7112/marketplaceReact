@@ -6,6 +6,13 @@
       "dom.iterable",
       "esnext"
     ],
+    "baseUrl": "./src",
+    "paths": {
+      "component/*": ["component/*"],
+      "util/*": ["util/*"],
+      "modal/*": ["modal/*"],
+      "store/*": ["store/*"],
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
