@@ -53,6 +53,7 @@
 
 .item-name .img-avatar {
     grid-column: span 1 / span 1;
+    border-radius: 4px;
 }
 
 .item-3 {

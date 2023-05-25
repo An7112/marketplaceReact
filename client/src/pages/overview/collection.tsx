@@ -7,12 +7,20 @@ import axios from 'axios';
 
 function Collection() {
     const { user } = useSelector((state: any) => state.auth);
-    const {limit} =  useSelector((state: any) => state.state)
+    const { limit } = useSelector((state: any) => state.state)
     const [storeInfo, setStoreInfo] = useState<StoreInfoModal[]>([]);
+    const [isloading, setIsLoading] = useState(false);
     useEffect(() => {
         async function getStoreInfo() {
-            const store = await axios.get(`http://localhost:9000/api/stores?limit=${limit}`)
-            setStoreInfo(store.data);
+            setIsLoading(true);
+            try {
+                const store = await axios.get(`http://localhost:9000/api/stores?limit=${limit}`)
+                setStoreInfo(store.data);
+            }catch(error){
+                console.log(error)
+            } finally {
+                setIsLoading(false);
+            }
         }
         getStoreInfo()
     }, [limit])
@@ -21,7 +29,7 @@ function Collection() {
         <div className='overview-main'>
             {user && <h3>Welcome back, {user.displayName}</h3>}
             <span className='paginated-title'>All stores</span>
-            <PaginatedList storeInfo={storeInfo}  />
+            <PaginatedList isloading={isloading} storeInfo={storeInfo} />
         </div>
     )
 }

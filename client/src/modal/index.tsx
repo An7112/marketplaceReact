@@ -21,6 +21,7 @@ export type Messages = {
 }
 
 export type ProductModal = {
+    _id: string,
     owner: string,
     productName: string,
     productPrice: number,
