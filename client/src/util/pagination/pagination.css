@@ -29,6 +29,10 @@
     cursor: pointer;
 }
 
+.paginated-item.items{
+    border-bottom: 1px solid rgb(245, 245, 245);
+}
+
 .item-name {
     display: grid;
     grid-template-columns: repeat(6, minmax(0, 1fr));

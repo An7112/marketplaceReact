@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User } from 'firebase/auth';
 
-interface State {
+interface AuthState {
   user: User | null;
   loading: boolean;
   error: string | null;
 }
 
-const initialState: State = {
+const initialState: AuthState = {
   user: null,
   loading: false,
   error: null,

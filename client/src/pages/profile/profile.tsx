@@ -32,7 +32,7 @@ export default function Profile() {
     }
     getStoreInfo()
   }, [user])
-
+  
   async function onChangeImageAvatar(e?: any) {
     setloadingAvatar(true)
     const file = e.target.files[0]
@@ -245,7 +245,8 @@ export default function Profile() {
                     <div className='div-label-input'>
                       <label htmlFor="Chain">STORE ID <BiRename className='icons' /></label>
                       <input defaultValue={user && user.uid} className='input' id='Chain' type="text" placeholder="id" required
-                        value={user && user.uid}
+                        value={user ? user.uid : null}
+                        readOnly
                       />
                     </div>
                     <div className='div-label-input full'>

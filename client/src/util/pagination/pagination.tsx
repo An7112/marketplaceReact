@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { GrFormPrevious, GrFormNext } from 'react-icons/gr'
 import './pagination.css'
+import { useDispatch } from 'react-redux';
+import {changeLimit} from 'store/reducers/state'
 
 interface Props {
   pageCount: number;
@@ -9,6 +11,7 @@ interface Props {
 }
 
 const Pagination: React.FC<Props> = ({ pageCount, onPageChange, initialPage = 1 }) => {
+  const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [inputPage, setInputPage] = useState(initialPage + 1);
   const [endPage, setEndPage] = useState(5);
@@ -36,6 +39,7 @@ const Pagination: React.FC<Props> = ({ pageCount, onPageChange, initialPage = 1 
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
+    dispatch(changeLimit((pageNumber + 1) * 10))
     onPageChange(pageNumber);
   };
 
@@ -77,6 +81,7 @@ const Pagination: React.FC<Props> = ({ pageCount, onPageChange, initialPage = 1 
       </div>
     ));
   };
+  
 
   return (
     <div className='class-pagination-action'>

@@ -5,6 +5,7 @@ import Header from 'component/header/header';
 import './App.css';
 import Collection from 'pages/overview/collection';
 import Profile from 'pages/profile/profile';
+import CreateItem from 'pages/create/create-item';
 
 function App() {
 return (
@@ -17,6 +18,7 @@ return (
           <Route path='/' element={<Navigate to='/collection' />} />
           <Route path='/collection' element={<Collection />} />
           <Route path='/profile' element={<Profile />} />
+          <Route path='/create' element={<CreateItem />} />
         </Routes>
         <div className='footer'></div>
         {/* <Footer /> */}

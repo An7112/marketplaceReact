@@ -7,8 +7,8 @@ import axios from 'axios';
 
 function Collection() {
     const { user } = useSelector((state: any) => state.auth);
+    const {limit} =  useSelector((state: any) => state.state)
     const [storeInfo, setStoreInfo] = useState<StoreInfoModal[]>([]);
-    const [limit, setLimit] = useState(10);
     useEffect(() => {
         async function getStoreInfo() {
             const store = await axios.get(`http://localhost:9000/api/stores?limit=${limit}`)
@@ -17,14 +17,11 @@ function Collection() {
         getStoreInfo()
     }, [limit])
 
-    const callbackFunc = (callbackData: number) => {
-        setLimit(callbackData)
-    }
     return (
         <div className='overview-main'>
             {user && <h3>Welcome back, {user.displayName}</h3>}
             <span className='paginated-title'>All stores</span>
-            <PaginatedList propsCallback={callbackFunc} storeInfo={storeInfo}  />
+            <PaginatedList storeInfo={storeInfo}  />
         </div>
     )
 }
