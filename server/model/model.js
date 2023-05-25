@@ -23,7 +23,7 @@ const StoresSchema = mongoose.Schema({
         require: true
     },
     storeProductLength:{
-        type: String,
+        type: Number,
         require: true
     },
     date:{

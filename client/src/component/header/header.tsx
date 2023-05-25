@@ -6,14 +6,15 @@ import { AiOutlineCaretDown } from 'react-icons/ai'
 import { IoSettingsOutline, IoLogOutOutline } from 'react-icons/io5'
 import { RiLoginCircleLine } from 'react-icons/ri'
 import './header.css'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { loginWithGoogle, logoutUser } from 'store/actions/auth'
 
 export default function Header() {
     const dispatch = useDispatch();
     const [userInfoVisible, setUserInfoVisible] = useState(false);
     const modalRef = useRef<HTMLDivElement>(null)
-    const { user } = useSelector((state: any) => state.auth);
+    const userStr = localStorage.getItem('user');
+    const user = JSON.parse(userStr ? userStr : '');
 
     const handleLoginWithGoogle = () => {
         dispatch(loginWithGoogle() as any);

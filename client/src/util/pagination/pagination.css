@@ -1,0 +1,162 @@
+.paginated-main {
+    width: 100%;
+    grid-column: span 8 / span 8;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xs);
+}
+/* 
+.paginated-column{
+    grid-column: span 1 / span 1;
+} */
+
+.paginated-item {
+    width: 100%;
+    padding: var(--spacing-xs) var(--spacing-xs);
+    display: grid;
+    border-radius: 4px;
+    grid-template-columns: repeat(18, minmax(0, 1fr));
+}
+
+.paginated-item.paginated-header {
+    color: var(--text-blur);
+    font-size: 14px;
+    /* font-weight: 500; */
+}
+
+.paginated-item.items:hover {
+    background-color: rgb(245, 245, 245);
+    cursor: pointer;
+}
+
+.item-name {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-column: span 8 / span 8;
+    font-size: 15px;
+}
+
+.item-name .item-name-store {
+    grid-column: span 5 / span 5;
+    display: block;
+    margin: auto;
+    margin-left: var(--spacing-sm);
+    overflow: hidden;
+    width: 90%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.item-name .img-avatar {
+    grid-column: span 1 / span 1;
+}
+
+.item-3 {
+    grid-column: span 5 / span 5;
+    display: block;
+    margin: auto;
+    margin-left: var(--spacing-sm);
+    overflow: hidden;
+    width: 90%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 15px;
+}
+
+.class-pagination-action {
+    margin-top: var(--spacing-sm);
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-xs);
+    justify-content: flex-end;
+}
+
+.class-pagination-action .page-item .page-link{
+    display: flex;
+    align-items: center;
+    width: 34px;
+    height: 34px;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.class-pagination-action .page-item.active .page-link{
+    background-color: var(--main-major);
+    color: var(--text-color);
+}
+
+.class-pagination-action .page-item .page-link:hover{
+    background-color: var(--main-major);
+    color: var(--text-color);
+}
+.jump-page{
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-xs);
+}
+
+.jump-page .form-control{
+    width: 34px;
+    border: none;
+    background-color: var(--text-blur);
+    border-radius: 4px;
+    height: 34px;
+}
+
+.jump-page .btn-primary{
+    width: 34px;
+    border: none;
+    background-color: var(--text-blur);
+    border-radius: 4px;
+    height: 34px
+}
+
+.class-img {
+    height: 70px;
+    border-radius: 6px;
+    overflow: hidden;
+    grid-column: span 1 / span 1;
+    position: relative;
+}
+
+.class-img .span-frame {
+    box-sizing: border-box;
+    display: block;
+    overflow: hidden;
+    width: initial;
+    height: initial;
+    background: none;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.class-img .span-frame .img-avatar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    margin: auto;
+    padding: 0;
+    border: none;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .paginated-main {
+      grid-template-columns: 1fr;
+    }
+  }

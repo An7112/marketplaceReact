@@ -5,7 +5,7 @@ const StoresSchema = require('../model/model')
 exports.getStores = async (req, res) => {
     try {
         const limit = parseInt(req.query.limit) || 10;
-        const collection = await CollectionSchema.find();
+        const collection = await StoresSchema.find();
         const limitData = collection.slice(0, limit);
         res.json(limitData)
     } catch (err) {
@@ -13,24 +13,43 @@ exports.getStores = async (req, res) => {
     }
 }
 
+exports.getListId = async (req, res) => {
+    try{
+        const listData = await StoresSchema.find();
+        const listId = [];
+        for( let i = 0; i < listData.length; i++){
+            listId.push(listData[i].storeId)
+        }
+        res.json(listId);
+    }catch(err){
+        res.json({message: err})
+    }
+}
+
 exports.createStore = async (req, res) => {
-    const Store = new StoresSchema({
-        storeId: req.body.storeId,
-        storeName: req.body.storeName,
-        storeDescription: req.body.storeDescription,
-        storeAvatar: req.body.storeAvatar,
-        storeBanner: req.body.storeBanner,
-        storeProductLength: req.body.storeProductLength,
-    })
-    try {
-        const saveStore = await Store.save().then((result) => {
-            res.status(200).json({
-                message: "created a successful store!",
-            })
+    const storesArr = await StoresSchema.find();
+    const exist = storesArr.some((element) => element.storeId === req.body.storeId);
+    if(!exist){
+        const Store = new StoresSchema({
+            storeId: req.body.storeId,
+            storeName: req.body.storeName,
+            storeDescription: req.body.storeDescription,
+            storeAvatar: req.body.storeAvatar,
+            storeBanner: req.body.storeBanner,
+            storeProductLength: 0,
         })
-        res.json(saveStore)
-    } catch (err) {
-        res.json({ message: err })
+        try {
+            const saveStore = await Store.save().then((result) => {
+                res.status(200).json({
+                    message: "created a successful store!",
+                })
+            })
+            res.json(saveStore)
+        } catch (err) {
+            res.json({ message: err })
+        }
+    }else{
+        res.json({ message: 'The store already exists' })
     }
 }
 

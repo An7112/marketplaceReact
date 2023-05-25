@@ -3,6 +3,7 @@ import { GoogleAuthProvider, User, signInWithPopup } from 'firebase/auth';
 import { AuthActionTypes } from 'store/reducers/auth';
 import { auth } from '../../firebase';
 
+const localStorageKey = 'user';
 export const loginRequest = (): AnyAction => ({
     type: AuthActionTypes.LOGIN_REQUEST,
 });
@@ -28,6 +29,7 @@ export const loginWithGoogle = () => {
         try {
             const result = await signInWithPopup(auth, provider);
             dispatch(loginSuccess(result.user!));
+            localStorage.setItem(localStorageKey, JSON.stringify(result.user));
         } catch (error:any) {
             dispatch(loginFailure(error.message));
         }
@@ -39,8 +41,18 @@ export const logoutUser = () => {
         try {
             await auth.signOut();
             dispatch(logout());
+            localStorage.removeItem(localStorageKey);
         } catch (error) {
             console.log(error);
         }
     };
 };
+
+export const restoreUser = (): AnyAction | null => {
+    const userStr = localStorage.getItem(localStorageKey);
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      return loginSuccess(user);
+    }
+    return null;
+  };
