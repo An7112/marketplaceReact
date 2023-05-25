@@ -8,13 +8,22 @@ import { RiLoginCircleLine } from 'react-icons/ri'
 import './header.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginWithGoogle, logoutUser, restoreUser } from 'store/actions/auth'
+import ShoppingCart from 'component/shopping-cart/shopping-cart'
+import { CartModal } from 'modal/index'
 
 export default function Header() {
     const dispatch = useDispatch();
+    const { countInCart } = useSelector((state: any) => state.state);
     const [userInfoVisible, setUserInfoVisible] = useState(false);
+    const [openCart, setOpenCart] = useState(false);
     const modalRef = useRef<HTMLDivElement>(null)
+    const [cartCount, setCartCount] = useState(0);
     const user = useSelector((state: any) => state.auth.user);
 
+    useEffect(() => {
+        const productsInCart: CartModal[] = JSON.parse(localStorage.getItem('cart') || '[]');
+        setCartCount(productsInCart.length);
+    },[countInCart])
     const handleLoginWithGoogle = () => {
         dispatch(loginWithGoogle() as any);
     };
@@ -44,13 +53,22 @@ export default function Header() {
     useEffect(() => {
         const action = restoreUser();
         if (action) {
-          dispatch(action);
+            dispatch(action);
         }
-      }, [dispatch]);
-
+    }, [dispatch]);
+    const callbackOpenCart = (callbackData: boolean) => {
+        setOpenCart(callbackData)
+    }
+    console.log(openCart)
     return (
         <>
             <div className='header'>
+                {
+                    openCart === true
+                    ?
+                    <ShoppingCart propsCallback={callbackOpenCart} />
+                    : ''
+                }
                 {userInfoVisible === true
                     && <div className='dropdown' ref={modalRef}>
                         <AiOutlineCaretDown className='down-icon' />
@@ -87,9 +105,9 @@ export default function Header() {
                         <div className='class-icon-header'>
                             <MdOutlineAttachMoney className='icon-header' />
                         </div>
-                        <div className='class-icon-header'>
+                        <div className='class-icon-header' onClick={() => setOpenCart(true)}>
                             <BsFillCartCheckFill className='icon-header' />
-                            <p className='cart-count'>0</p>
+                            <p className='cart-count'>{cartCount}</p>
                         </div>
                         <div className='class-avatar' >
                             <span className='span-frame' onClick={toggleUserInfoVisible}>

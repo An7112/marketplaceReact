@@ -47,31 +47,33 @@ const PaginatedList: React.FC<Props> = ({ storeInfo, isloading }) => {
               Store creation date
             </span>
           </div>
-          {pagedItems.slice(
-            0,
-            checkDatalength ? Math.ceil(pagedItems.length / 2) : 5)
-            .map((element: StoreInfoModal, index: number) => (
-              isloading === true
-                ? <LoadingFrame divHeight={'87px'} divWidth={'100%'} spacing={'0.5rem'}/>
-                : <Link to={`/store/${element._id}`}>
-                  <div className='paginated-item items'>
-                    <div className='item-name'>
-                      <div className='class-img'>
-                        <span className='span-frame'>
-                          <img className='img-avatar' alt='' src={element.storeAvatar} />
-                        </span>
+          {
+            isloading === true
+              ? <LoadingFrame divHeight={'87px'} divWidth={'100%'} spacing={'0.5rem'} />
+              : pagedItems.slice(
+                0,
+                checkDatalength ? Math.ceil(pagedItems.length / 2) : 5)
+                .map((element: StoreInfoModal, index: number) => (
+                  <Link to={`/store/${element._id}`}>
+                    <div className='paginated-item items'>
+                      <div className='item-name'>
+                        <div className='class-img'>
+                          <span className='span-frame'>
+                            <img className='img-avatar' alt='' src={element.storeAvatar} />
+                          </span>
+                        </div>
+                        <span className='item-name-store'>{element.storeName}</span>
                       </div>
-                      <span className='item-name-store'>{element.storeName}</span>
+                      <span className='item-3'>
+                        {element.storeProductLength}
+                      </span>
+                      <span className='item-3'>
+                        {element.date}
+                      </span>
                     </div>
-                    <span className='item-3'>
-                      {element.storeProductLength}
-                    </span>
-                    <span className='item-3'>
-                      {element.date}
-                    </span>
-                  </div>
-                </Link>
-            ))}
+                  </Link>
+                ))
+          }
         </div>
 
         <div className='paginated-column'>
@@ -86,30 +88,33 @@ const PaginatedList: React.FC<Props> = ({ storeInfo, isloading }) => {
               Store creation date
             </span>
           </div>
-          {pagedItems.slice(
-            checkDatalength ? Math.ceil(pagedItems.length / 2) : 5, 10)
-            .map((element: StoreInfoModal) => (
-              isloading === true
-                ? <LoadingFrame divHeight={'87px'} divWidth={'100%'} />
-                : <Link to={`/store/${element._id}`}>
-                  <div className='paginated-item items'>
-                    <div className='item-name'>
-                      <div className='class-img'>
-                        <span className='span-frame'>
-                          <img className='img-avatar' alt='' src={element.storeAvatar} />
-                        </span>
+          {
+            isloading === true
+              ? <LoadingFrame divHeight={'87px'} divWidth={'100%'} />
+              : pagedItems.slice(
+                checkDatalength ? Math.ceil(pagedItems.length / 2) : 5, 10)
+                .map((element: StoreInfoModal) => (
+                  <Link to={`/store/${element._id}`}>
+                    <div className='paginated-item items'>
+                      <div className='item-name'>
+                        <div className='class-img'>
+                          <span className='span-frame'>
+                            <img className='img-avatar' alt='' src={element.storeAvatar} />
+                          </span>
+                        </div>
+                        <span className='item-name-store'>{element.storeName}</span>
                       </div>
-                      <span className='item-name-store'>{element.storeName}</span>
+                      <span className='item-3'>
+                        {element.storeProductLength}
+                      </span>
+                      <span className='item-3'>
+                        {element.date}
+                      </span>
                     </div>
-                    <span className='item-3'>
-                      {element.storeProductLength}
-                    </span>
-                    <span className='item-3'>
-                      {element.date}
-                    </span>
-                  </div>
-                </Link>
-            ))}
+                  </Link>
+                ))
+          }
+
         </div>
 
       </div>

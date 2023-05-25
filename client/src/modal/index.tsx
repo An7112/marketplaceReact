@@ -30,3 +30,9 @@ export type ProductModal = {
     quantity: number,
     date: any
 }
+
+export type CartModal = {
+    owner: string,
+    id: string,
+    qty: number
+}

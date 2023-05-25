@@ -3,26 +3,33 @@ import './storeDetails.css'
 import { useParams } from 'react-router-dom';
 import { DiReact } from 'react-icons/di'
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai'
-import { ProductModal } from 'modal/index';
+import { CartModal, ProductModal } from 'modal/index';
 import axios from 'axios';
 import { LoadingFrame } from 'component/loading-frame/loadingFrame';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCountInCart } from 'store/reducers/state';
 import { addToCart, removeFromCart } from 'util/cart/cart';
 
 function StoreDetails() {
   const dispatch = useDispatch();
+  const { countInCart } = useSelector((state: any) => state.state);
   const { storeId } = useParams();
   const [storeProducts, setStoreProducts] = useState<ProductModal[]>([]);
   const [isloading, setIsLoading] = useState(false);
 
-  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [cartItems, setCartItems] = useState<CartModal[]>([]);
   const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const productsInCart: CartModal[] = JSON.parse(localStorage.getItem('cart') || '[]');
+    setCartItems(productsInCart);
+  }, [countInCart]);
 
   useEffect(() => {
     dispatch(setCountInCart(count))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count])
+
   useEffect(() => {
     const getStoreProducts = async () => {
       setIsLoading(true);
@@ -50,7 +57,7 @@ function StoreDetails() {
     setCount(prev => prev - 1)
   };
   const isInCart = (_id: string) => {
-    if (cartItems.filter((ele: any) => ele.id === _id).length) {
+    if (cartItems.filter((ele: CartModal) => ele.id === _id).length) {
       return true
     }
   };
@@ -59,13 +66,13 @@ function StoreDetails() {
     <>
       <h3 className='title-page'>Products</h3>
       <div className='list-item'>
-        {storeProducts.map((element: ProductModal) => (
-          isloading === true
-            ? <LoadingFrame divWidth={'240px'} divHeight={'244px'} spacing={'0.5rem'} />
-            : <div className='item'>
+        {isloading === true
+          ? <LoadingFrame divWidth={'240px'} divHeight={'244px'} spacing={'0.5rem'} />
+          : storeProducts.map((element: ProductModal) => (
+            <div className='item'>
               {isInCart(element._id)
                 ? <button className='add-to-cart' onClick={() => handleRemoveFromCart(element._id, element.owner)}>
-                  <AiFillHeart/>
+                  <AiFillHeart />
                 </button>
                 : <button className='add-to-cart' onClick={() => handleAddToCart(element._id, element.owner)}>
                   <AiOutlineHeart />
@@ -81,7 +88,8 @@ function StoreDetails() {
               <h5 className='item-name blur'>{element.owner}</h5>
               <span className='product-price'><DiReact /> {element.productPrice}</span>
             </div>
-        ))}
+          ))
+        }
       </div>
     </>
 

@@ -10,6 +10,6 @@ interface IProps {
 }
 export function LoadingFrame({divWidth, divHeight, spacing, borderRadius, maxDivWidth}:IProps) {
   return (
-    <div className='div-load' style={{width:`${divWidth}`, height:`${divHeight}`, margin:`${spacing}`, borderRadius:`${borderRadius}`, maxWidth:`${maxDivWidth}`}}></div>
+    <div className='div-load' style={{width:`${divWidth}`, height:`${divHeight}`, padding:`${spacing}`, borderRadius:`${borderRadius}`, maxWidth:`${maxDivWidth}`}}></div>
   )
 }
