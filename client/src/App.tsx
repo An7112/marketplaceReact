@@ -6,6 +6,7 @@ import './App.css';
 import Collection from 'pages/overview/collection';
 import Profile from 'pages/profile/profile';
 import CreateItem from 'pages/create/create-item';
+import StoreDetails from 'pages/store-details/storeDetails';
 
 function App() {
 return (
@@ -19,6 +20,8 @@ return (
           <Route path='/collection' element={<Collection />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/create' element={<CreateItem />} />
+          <Route path='/store/:storeId' element={<StoreDetails />} />
+          <Route path='/product/:storeId/:productId' element={<CreateItem />} />
         </Routes>
         <div className='footer'></div>
         {/* <Footer /> */}

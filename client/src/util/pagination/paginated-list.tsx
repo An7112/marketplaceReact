@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import Pagination from './pagination';
 import './pagination.css'
 import { StoreInfoModal } from 'modal/index';
+import { Link } from 'react-router-dom';
 
 interface Props {
   storeInfo: StoreInfoModal[];
@@ -48,22 +49,24 @@ const PaginatedList: React.FC<Props> = ({ storeInfo }) => {
             0,
             checkDatalength ? Math.ceil(pagedItems.length / 2) : 5)
             .map((element: StoreInfoModal, index: number) => (
-              <div className='paginated-item items'>
-                <div className='item-name'>
-                  <div className='class-img'>
-                    <span className='span-frame'>
-                      <img className='img-avatar' alt='' src={element.storeAvatar} />
-                    </span>
+              <Link to={`/store/${element._id}`}>
+                <div className='paginated-item items'>
+                  <div className='item-name'>
+                    <div className='class-img'>
+                      <span className='span-frame'>
+                        <img className='img-avatar' alt='' src={element.storeAvatar} />
+                      </span>
+                    </div>
+                    <span className='item-name-store'>{element.storeName}</span>
                   </div>
-                  <span className='item-name-store'>{element.storeName}</span>
+                  <span className='item-3'>
+                    {element.storeProductLength}
+                  </span>
+                  <span className='item-3'>
+                    {element.date}
+                  </span>
                 </div>
-                <span className='item-3'>
-                  {element.storeProductLength}
-                </span>
-                <span className='item-3'>
-                  {element.date}
-                </span>
-              </div>
+              </Link>
             ))}
         </div>
 
@@ -82,23 +85,26 @@ const PaginatedList: React.FC<Props> = ({ storeInfo }) => {
           {pagedItems.slice(
             checkDatalength ? Math.ceil(pagedItems.length / 2) : 5, 10)
             .map((element: StoreInfoModal) => (
-            <div className='paginated-item items'>
-              <div className='item-name'>
-                <div className='class-img'>
-                  <span className='span-frame'>
-                    <img className='img-avatar' alt='' src={element.storeAvatar} />
+              <Link to={`/store/${element._id}`}>
+                <div className='paginated-item items'>
+                  <div className='item-name'>
+                    <div className='class-img'>
+                      <span className='span-frame'>
+                        <img className='img-avatar' alt='' src={element.storeAvatar} />
+                      </span>
+                    </div>
+                    <span className='item-name-store'>{element.storeName}</span>
+                  </div>
+                  <span className='item-3'>
+                    {element.storeProductLength}
+                  </span>
+                  <span className='item-3'>
+                    {element.date}
                   </span>
                 </div>
-                <span className='item-name-store'>{element.storeName}</span>
-              </div>
-              <span className='item-3'>
-                {element.storeProductLength}
-              </span>
-              <span className='item-3'>
-                {element.date}
-              </span>
-            </div>
-          ))}
+              </Link>
+
+            ))}
         </div>
 
       </div>

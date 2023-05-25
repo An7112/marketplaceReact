@@ -19,3 +19,13 @@ export type Messages = {
     description?: string | null,
     status: boolean | null,
 }
+
+export type ProductModal = {
+    owner: string,
+    productName: string,
+    productPrice: number,
+    productDescription: string,
+    productIMG: string,
+    quantity: number,
+    date: any
+}

@@ -21,6 +21,10 @@ span {
   margin: 0;
   padding: 0;
 }
+a{
+  text-decoration: none;
+  color: inherit;
+}
 :root {
   --main-major: #55B9A9;
   --main-bg: white;
