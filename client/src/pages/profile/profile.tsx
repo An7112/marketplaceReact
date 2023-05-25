@@ -1,14 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { DiClojureAlt } from 'react-icons/di'
-import { IoSwapVerticalSharp } from 'react-icons/io5'
-import { SiEthereum } from 'react-icons/si'
-import { useDispatch, useSelector } from 'react-redux';
 import './profile.css'
-import { AiOutlineLoading, AiOutlineClear } from 'react-icons/ai'
+import { AiOutlineLoading, AiOutlineClear, AiOutlineCloud } from 'react-icons/ai'
 import { BiRename } from 'react-icons/bi'
 import { TbFileDescription } from 'react-icons/tb'
 import { client } from "util/infura-ipfs/ipfs";
+import { BsThreeDots } from 'react-icons/bs'
 import axios from 'axios';
+import { useSelector } from "react-redux";
 
 export default function Profile() {
   const [refetch, setRefetch] = useState(0);
@@ -19,10 +17,21 @@ export default function Profile() {
   const [formInput, updateFormInput] = useState<any>({ storeName: '', storeDescription: '' })
   const avatarRef = useRef<any>(null);
   const bannerRef = useRef<any>(null);
-  const [swapToken, setSwapToken] = useState(true);
+  const [storeInfo, setStoreInfo] = useState<any>(null)
 
-  const userStr = localStorage.getItem('user');
-  const user = JSON.parse(userStr ? userStr : '');
+  const user = useSelector((state: any) => state.auth.user);
+
+  useEffect(() => {
+    async function getStoreInfo() {
+      if (user) {
+        const store = await axios.get(`http://localhost:9000/api/stores/${user.uid}`)
+        setStoreInfo(store.data);
+      }else{
+        setStoreInfo(null)
+      }
+    }
+    getStoreInfo()
+  }, [user])
 
   async function onChangeImageAvatar(e?: any) {
     setloadingAvatar(true)
@@ -67,10 +76,10 @@ export default function Profile() {
     if (storeName && storeDescription && user) {
       const createData = new FormData()
       createData.append("storeId", user.uid)
-      createData.append("storeName",storeName)
-      createData.append("storeDescription",storeDescription)
-      createData.append("storeAvatar",storeAvatar)
-      createData.append("storeBanner",storeBanner)
+      createData.append("storeName", storeName)
+      createData.append("storeDescription", storeDescription)
+      createData.append("storeAvatar", storeAvatar)
+      createData.append("storeBanner", storeBanner)
       try {
         await axios.post('http://localhost:9000/api/stores', createData).then(res => console.log(res.data.message));
       } catch (error) {
@@ -78,7 +87,6 @@ export default function Profile() {
       }
     }
   }
-
 
   function clearContentAvatar() {
     setStoreAvatar('')
@@ -100,21 +108,22 @@ export default function Profile() {
             <div className='grid-col-span-4'>
               <div className='frame-user'>
                 <div className='banner-user'>
+                  <img className="store-banner" src={storeInfo ? storeInfo.storeBanner : 'media/banner.jpg'} alt="" />
                   <div className='user'>
-                    <img src={user ? user.photoURL : ''} alt='' />
+                    <img src={storeInfo ? storeInfo.storeAvatar : 'media/avatar.avif'} alt='' />
                   </div>
                 </div>
                 <div className='frame-username'>
-                  {/* <h4>{stores.nameStore}</h4> */}
+                  <h4>{user && user.displayName}</h4>
                   <p className='text-base'>{user && user.email}</p>
                 </div>
                 <div className='frame-username-dsc'>
                   <div className='dsc-item'>
-                    {/* <h4>{balance}</h4> */}
+                    <h4>1</h4>
                     <p className='text-base'>Balance</p>
                   </div>
                   <div className='dsc-item'>
-                    {/* <h4>{lastPurchase}</h4> */}
+                    <h4>1</h4>
                     <p className='text-base'>Purchased</p>
                   </div>
                   <div className='dsc-item'>
@@ -126,71 +135,30 @@ export default function Profile() {
             </div>
             <div className='grid-col-span-3'>
               <div className='frame-span-3'>
-                <h3 className="title">Swap Token</h3>
-                <div className="frame-swap">
-                  <div className="frame-token">
-                    <h3 className="from-to-title">
-                      From
-                    </h3>
-                    <div className="swap-dsc">
-                      <div className="swap-dsc-content">
-                        {swapToken === true
-                          ? <div className="icon-token">
-                            <SiEthereum className="ether-icon" />
-                            <h3 className="from-to-title token">
-                              ETH
-                            </h3>
-                          </div>
-                          : <div className="icon-token">
-                            <DiClojureAlt />
-                            <h3 className="from-to-title token">
-                              HCMA
-                            </h3>
-                          </div>
-                        }
-                        <div className="frame-balance swap">
-                          <input defaultValue={1} type="number" className="ether-input" />
-                        </div>
-                      </div>
-                      <div className="icon-swap-token" onClick={() => setSwapToken(prev => !prev)}>
-                        <IoSwapVerticalSharp />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="frame-token">
-                    <h3 className="from-to-title">
-                      To
-                    </h3>
-                    <div className="swap-dsc">
-                      <div className="swap-dsc-content">
-                        {swapToken === true
-                          ? <div className="icon-token">
-                            <DiClojureAlt />
-                            <h3 className="from-to-title token">
-                              HCMA
-                            </h3>
-                          </div>
-                          : <div className="icon-token">
-                            <SiEthereum className="ether-icon" />
-                            <h3 className="from-to-title token">
-                              ETH
-                            </h3>
-                          </div>
-                        }
-                        <div className="frame-balance swap">
-                          {/* <h3 className="from-to-title">{amountInput}</h3>
-                          <h3 className="from-to-title blur">( ~ {amountInput} ETH)</h3> */}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="price-swap">
-                    <h3 className="title blur">Price</h3>
-                    <h3 className="title">1 ETH = 1 HCMA</h3>
-                  </div>
-                  <button className="swap-button">Swap</button>
+                <div className="margin-left">
+                  <button className="dot-button">
+                    <BsThreeDots />
+                  </button>
                 </div>
-
+                <div className="class-flex-col">
+                  <button className="cloud-button">
+                    <AiOutlineCloud />
+                  </button>
+                  <h3>Your storage</h3>
+                  <p>Supervise your drive space in the easiest way</p>
+                </div>
+                <div className="class-flex-col-bottom">
+                  <div className="flex-between">
+                    <span>26 GB</span>
+                    <span>50 GB</span>
+                  </div>
+                  <div className="line-percent">
+                    <div className="percent" style={{
+                      gridColumn: `span 26 / span 26`,
+                      backgroundColor: '#55B9A9'
+                    }}></div>
+                  </div>
+                </div>
               </div>
             </div>
             <div className='grid-col-span-5'>
@@ -287,7 +255,6 @@ export default function Profile() {
                       />
                     </div>
                   </div>
-
                   <button className='button-publish' onClick={createStore}>Create your store</button>
                 </div>
               </div>

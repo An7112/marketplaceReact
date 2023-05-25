@@ -1,17 +1,26 @@
 import React, { useState, useMemo } from 'react';
 import Pagination from './pagination';
 import './pagination.css'
+import { StoreInfoModal } from 'modal/index';
 
-const PaginatedList = () => {
+interface Props {
+  storeInfo: StoreInfoModal[];
+  propsCallback: (limit: number) => void,
+}
+
+
+const PaginatedList: React.FC<Props> = ({ storeInfo, propsCallback }) => {
   const [data, setData] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, _] = useState(22);
-  const [owner, setOwner] = useState(false);
 
   const handlePageChange = (selectedPage: number) => {
     setCurrentPage(selectedPage);
   };
 
+  const changeLimit = () => {
+
+  }
   const offset = currentPage * itemsPerPage;
   const pagedItems = useMemo(() => {
     const startIndex = offset;
@@ -79,7 +88,6 @@ const PaginatedList = () => {
               Store creation date
             </span>
           </div>
-
         </div>
       </div>
       <Pagination

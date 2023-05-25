@@ -28,10 +28,10 @@ exports.getListId = async (req, res) => {
 
 exports.createStore = async (req, res) => {
     const storesArr = await StoresSchema.find();
-    const exist = storesArr.some((element) => element.storeId === req.body.storeId);
+    const exist = storesArr.some((element) => element._id === req.body.storeId);
     if(!exist){
         const Store = new StoresSchema({
-            storeId: req.body.storeId,
+            _id: req.body.storeId,
             storeName: req.body.storeName,
             storeDescription: req.body.storeDescription,
             storeAvatar: req.body.storeAvatar,
@@ -82,7 +82,7 @@ exports.removeStore = (req, res) => {
 
 exports.updateStore = async (req, res) => {
     const updateStore = {
-        storeId: req.body.storeId,
+        _id: req.body.storeId,
         storeName: req.body.storeName,
         storeDescription: req.body.storeDescription,
         storeAvatar: req.body.storeAvatar,

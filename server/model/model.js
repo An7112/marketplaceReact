@@ -2,36 +2,35 @@
 const mongoose = require('mongoose')
 
 const StoresSchema = mongoose.Schema({
-    storeId:{
+    _id: {
         type: String,
         require: true
     },
-    storeName:{
+    storeName: {
         type: String,
         require: true
     },
-    storeDescription:{
+    storeDescription: {
         type: String,
         require: true
     },
-    storeAvatar:{
+    storeAvatar: {
         type: String,
         require: true
     },
-    storeBanner:{
+    storeBanner: {
         type: String,
         require: true
     },
-    storeProductLength:{
+    storeProductLength: {
         type: Number,
         require: true
     },
-    date:{
-        type:Date,
-        default:Date.now
+    date: {
+        type: Date,
+        default: Date.now
     }
-},{
-    stores:"Stores"
+}, {
+    stores: "Stores"
 })
-
 module.exports = mongoose.model("Stores", StoresSchema)
