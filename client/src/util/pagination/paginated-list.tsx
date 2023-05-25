@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Pagination from './pagination';
 import './pagination.css'
 import { StoreInfoModal } from 'modal/index';
@@ -11,157 +11,13 @@ interface Props {
 const PaginatedList: React.FC<Props> = ({ storeInfo }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, _] = useState(10);
+  const [checkDatalength, setCheckDatalength] = useState(false);
 
-  // const fetchData = [{
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 1",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // },
-  // {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 2",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // },
-  // {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 3",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // },
-  // {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 4",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // },
-  // {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 5",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // },
-  // {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 6",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // }, {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store MOc 7",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // }, {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 8",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // }, {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 9",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // }, {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 10",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // }, {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 11",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // }, {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 12",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // }, {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 13",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // }, {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 14",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // }, {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 15",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // }, {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 16",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // }, {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 17",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // }, {
-  //   "_id": "N9OxajUMdsQEwKT7xE28JAuKtyQ2",
-  //   "storeName": "store 18",
-  //   "storeDescription": "Lorem",
-  //   "storeAvatar": "https://ipfs.io/ipfs/QmQX6tYEJZqYQWWEDib2BXRKygaLR41pHfqU6gZTxgRfq3",
-  //   "storeBanner": "https://ipfs.io/ipfs/QmU1J77UYUsAwWpAbfXDyoPsHMzrCQsPaR24WJ7qPCmBCt",
-  //   "storeProductLength": 0,
-  //   "date": "2023-05-25T06:10:26.918Z",
-  // }]
+  useEffect(() => {
+    if (storeInfo.length < 6) {
+      setCheckDatalength(true);
+    }
+  }, [storeInfo])
   const handlePageChange = (selectedPage: number) => {
     setCurrentPage(selectedPage);
   };
@@ -188,26 +44,29 @@ const PaginatedList: React.FC<Props> = ({ storeInfo }) => {
               Store creation date
             </span>
           </div>
-          {pagedItems.slice(0, 5).map((element: StoreInfoModal, index:number) => (
-          <div className='paginated-item items'>
-            <div className='item-name'>
-              <div className='class-img'>
-                <span className='span-frame'>
-                  <img className='img-avatar' alt='' src={element.storeAvatar} />
+          {pagedItems.slice(
+            0,
+            checkDatalength ? Math.ceil(pagedItems.length / 2) : 5)
+            .map((element: StoreInfoModal, index: number) => (
+              <div className='paginated-item items'>
+                <div className='item-name'>
+                  <div className='class-img'>
+                    <span className='span-frame'>
+                      <img className='img-avatar' alt='' src={element.storeAvatar} />
+                    </span>
+                  </div>
+                  <span className='item-name-store'>{element.storeName}</span>
+                </div>
+                <span className='item-3'>
+                  {element.storeProductLength}
+                </span>
+                <span className='item-3'>
+                  {element.date}
                 </span>
               </div>
-              <span className='item-name-store'>{element.storeName}</span>
-            </div>
-            <span className='item-3'>
-              {element.storeProductLength}
-            </span>
-            <span className='item-3'>
-              {element.date}
-            </span>
-          </div>
-        ))}
+            ))}
         </div>
-       
+
         <div className='paginated-column'>
           <div className='paginated-item paginated-header'>
             <span className='item-name'>
@@ -220,26 +79,28 @@ const PaginatedList: React.FC<Props> = ({ storeInfo }) => {
               Store creation date
             </span>
           </div>
-          {pagedItems.slice(5, 10).map((element: StoreInfoModal) => (
-          <div className='paginated-item items'>
-            <div className='item-name'>
-              <div className='class-img'>
-                <span className='span-frame'>
-                  <img className='img-avatar' alt='' src={element.storeAvatar} />
-                </span>
+          {pagedItems.slice(
+            checkDatalength ? Math.ceil(pagedItems.length / 2) : 5, 10)
+            .map((element: StoreInfoModal) => (
+            <div className='paginated-item items'>
+              <div className='item-name'>
+                <div className='class-img'>
+                  <span className='span-frame'>
+                    <img className='img-avatar' alt='' src={element.storeAvatar} />
+                  </span>
+                </div>
+                <span className='item-name-store'>{element.storeName}</span>
               </div>
-              <span className='item-name-store'>{element.storeName}</span>
+              <span className='item-3'>
+                {element.storeProductLength}
+              </span>
+              <span className='item-3'>
+                {element.date}
+              </span>
             </div>
-            <span className='item-3'>
-              {element.storeProductLength}
-            </span>
-            <span className='item-3'>
-              {element.date}
-            </span>
-          </div>
-        ))}
+          ))}
         </div>
-        
+
       </div>
       <Pagination
         pageCount={Math.ceil(storeInfo.length / itemsPerPage)}

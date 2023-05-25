@@ -6,7 +6,9 @@ import { TbFileDescription } from 'react-icons/tb'
 import { client } from "util/infura-ipfs/ipfs";
 import { BsThreeDots } from 'react-icons/bs'
 import axios from 'axios';
+import { Messages, StoreInfoModal } from 'modal/index'
 import { useSelector } from "react-redux";
+import { ToastMessage } from 'component/toast-message'
 
 export default function Profile() {
   const [refetch, setRefetch] = useState(0);
@@ -17,7 +19,9 @@ export default function Profile() {
   const [formInput, updateFormInput] = useState<any>({ storeName: '', storeDescription: '' })
   const avatarRef = useRef<any>(null);
   const bannerRef = useRef<any>(null);
-  const [storeInfo, setStoreInfo] = useState<any>(null)
+  const [storeInfo, setStoreInfo] = useState<StoreInfoModal>()
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState<Messages>({ title: null, status: null, description: null });
 
   const user = useSelector((state: any) => state.auth.user);
 
@@ -26,13 +30,11 @@ export default function Profile() {
       if (user) {
         const store = await axios.get(`http://localhost:9000/api/stores/${user.uid}`)
         setStoreInfo(store.data);
-      }else{
-        setStoreInfo(null)
       }
     }
     getStoreInfo()
   }, [user])
-  
+
   async function onChangeImageAvatar(e?: any) {
     setloadingAvatar(true)
     const file = e.target.files[0]
@@ -81,7 +83,13 @@ export default function Profile() {
       createData.append("storeAvatar", storeAvatar)
       createData.append("storeBanner", storeBanner)
       try {
-        await axios.post('http://localhost:9000/api/stores', createData).then(res => console.log(res.data.message));
+        await axios.post('http://localhost:9000/api/stores', createData).then(res => setMessage({
+          title: res.data.message,
+          description: res.data.message,
+          status: true
+        }));
+        setVisible(true)
+
       } catch (error) {
         console.log(error);
       }
@@ -90,17 +98,24 @@ export default function Profile() {
 
   function clearContentAvatar() {
     setStoreAvatar('')
-    avatarRef.current!.value = null
+    if (avatarRef.current) {
+      avatarRef.current.value = null;
+    }
   }
 
   function clearContentBanner() {
     setStoreBanner('')
-    bannerRef.current!.value = null
+    if (bannerRef.current) {
+      bannerRef.current.value = null;
+    }
   }
 
 
   return (
     <div className='profile-main'>
+      {visible === true ? <ToastMessage
+        {...message}
+      /> : ''}
       <h3 className='title-page'>Profile</h3>
       <div className='profile-container'>
         <div className='container-flex-full'>
@@ -119,8 +134,8 @@ export default function Profile() {
                 </div>
                 <div className='frame-username-dsc'>
                   <div className='dsc-item'>
-                    <h4>1</h4>
-                    <p className='text-base'>Balance</p>
+                    <h4>{storeInfo?.storeProductLength ? storeInfo?.storeProductLength : 0}</h4>
+                    <p className='text-base'>Products</p>
                   </div>
                   <div className='dsc-item'>
                     <h4>1</h4>

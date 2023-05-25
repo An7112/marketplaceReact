@@ -13,3 +13,9 @@ export type StoreInfoModal = {
     storeProductLength: number,
     date: any
 }
+
+export type Messages = {
+    title: string | null,
+    description?: string | null,
+    status: boolean | null,
+}

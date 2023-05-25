@@ -6,28 +6,32 @@ import { VscGitPullRequestCreate } from 'react-icons/vsc'
 import { AiOutlineClear, AiOutlineLoading, AiOutlineDatabase } from 'react-icons/ai'
 import { client } from "util/infura-ipfs/ipfs";
 import { ToastMessage } from 'component/toast-message'
+import { Messages } from 'modal/index'
 import './create.css'
-
-type Messages = {
-  title: string | null,
-  description?: string | null,
-  status: boolean | null,
-}
+import { useSelector } from 'react-redux'
+import axios from 'axios'
 
 export default function CreateItem() {
   const [imageURL, setImageURL] = useState('')
   const [loading, setLoading] = useState(false)
-  const [formInput, updateFormInput] = useState<any>({ name: '', description: '', price: 0, quantity: 0 })
+  const [formInput, updateFormInput] = useState<any>({
+    productName: '',
+    productPrice: '',
+    productDescription: '',
+    quantity: 0
+  })
   const [visible, setVisible] = useState(false);
-  const [message, setMessage] = useState<Messages>({title: null, status: null, description: null });
+  const [message, setMessage] = useState<Messages>({ title: null, status: null, description: null });
+  const user = useSelector((state: any) => state.auth.user);
 
   const inputRef = useRef<any>(null);
 
   function clearContent() {
-    setImageURL('')
-    inputRef.current!.value = null
+    setImageURL('');
+    if (inputRef.current) {
+      inputRef.current.value = null;
+    }
   }
-
 
   async function onChangeImage(e?: any) {
     setLoading(true)
@@ -50,7 +54,27 @@ export default function CreateItem() {
 
 
   async function handleSubmit() {
-    
+    setVisible(false);
+    if (user) {
+      const {productName, productPrice, productDescription, quantity} = formInput;
+      const createData = new FormData()
+      createData.append("owner", user.uid)
+      createData.append("productName", productName)
+      createData.append("productPrice", productPrice)
+      createData.append("productDescription", productDescription)
+      createData.append("quantity", quantity)
+      createData.append("productIMG", imageURL)
+      try{
+        await axios.post('http://localhost:9000/api/products', createData).then(res => setMessage({
+          title: res.data.message,
+          description: res.data.message,
+          status: res.data.status
+        }))
+        setVisible(true);
+      }catch(error){
+       console.log(error);
+      }
+    }
   }
 
   useEffect(() => {
@@ -88,19 +112,19 @@ export default function CreateItem() {
                       <div className='div-label-input'>
                         <label htmlFor="Name">NAME <BiRename className='icons' /></label>
                         <input className='input' id='Name' type="text" placeholder="Name" pattern='.{1,}' required
-                          onChange={e => updateFormInput({ ...formInput, name: e.target.value })}
+                          onChange={e => updateFormInput({ ...formInput, productName: e.target.value })}
                         />
                       </div>
                       <div className='div-label-input'>
                         <label htmlFor="Price">PRICE <IoPricetagsOutline className='icons' /></label>
                         <input className='input' id='Price' type="Number" placeholder="Price" pattern='.{1,}' required
-                          onChange={e => updateFormInput({ ...formInput, price: e.target.value })}
+                          onChange={e => updateFormInput({ ...formInput, productPrice: e.target.value })}
                         />
                       </div>
                       <div className='div-label-input full'>
                         <label htmlFor="Description">Description <TbFileDescription className='icons' /></label>
                         <textarea id='Description' rows={2} placeholder='Asset Description...'
-                          onChange={e => updateFormInput({ ...formInput, description: e.target.value })}
+                          onChange={e => updateFormInput({ ...formInput, productDescription: e.target.value })}
                         />
                       </div>
                       <div className='div-label-input grid2'>
@@ -146,6 +170,7 @@ export default function CreateItem() {
                         && formInput.quantity !== 0
                         && formInput.description !== ''
                         && imageURL !== ''
+                        && user
                         ? <button className='button-not-empty' type='submit' onClick={handleSubmit}>Create item</button>
                         : <button type='button' className='button-empty' style={{ cursor: 'default' }}>Data cannot be empty</button>}
                     </div>
