@@ -8,8 +8,8 @@ import axios from 'axios';
 import { Messages, StoreInfoModal } from 'modal/index'
 import { useSelector } from "react-redux";
 import { ToastMessage } from 'component/toast-message'
-import './profile.css'
 import QueryLoading from "component/query-loading/query-loading";
+import './profile.css'
 
 export default function Profile() {
   const [storeAvatar, setStoreAvatar] = useState('')
@@ -23,6 +23,7 @@ export default function Profile() {
   const [visible, setVisible] = useState(false);
   const [isloading, setisLoading] = useState(false);
   const [message, setMessage] = useState<Messages>({ title: null, status: null, description: null });
+  const [refetch, setRefetch] = useState(0);
 
   const user = useSelector((state: any) => state.auth.user);
 
@@ -34,7 +35,7 @@ export default function Profile() {
       }
     }
     getStoreInfo()
-  }, [user])
+  }, [user, refetch])
 
   async function onChangeImageAvatar(e?: any) {
     setloadingAvatar(true)
@@ -96,6 +97,7 @@ export default function Profile() {
       } catch (error) {
         console.log(error);
       }finally{
+        setRefetch(prev => prev + 1);
         setisLoading(false)
       }
     }
@@ -129,9 +131,9 @@ export default function Profile() {
             <div className='grid-col-span-4'>
               <div className='frame-user'>
                 <div className='banner-user'>
-                  <img className="store-banner" src={user ? storeInfo?.storeBanner : 'media/banner.jpg'} alt="" />
+                  <img className="store-banner" src={user && storeInfo?.storeBanner ? storeInfo.storeBanner : 'media/banner.jpg'} alt="" />
                   <div className='user'>
-                    <img src={user ? storeInfo?.storeAvatar : 'media/avatar.avif'} alt='' />
+                    <img src={user && storeInfo?.storeAvatar ? storeInfo.storeAvatar : 'media/avatar.avif'} alt='' />
                   </div>
                 </div>
                 <div className='frame-username'>
