@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import './profile.css'
 import { AiOutlineLoading, AiOutlineClear, AiOutlineCloud } from 'react-icons/ai'
 import { BiRename } from 'react-icons/bi'
 import { TbFileDescription } from 'react-icons/tb'
@@ -9,9 +8,9 @@ import axios from 'axios';
 import { Messages, StoreInfoModal } from 'modal/index'
 import { useSelector } from "react-redux";
 import { ToastMessage } from 'component/toast-message'
+import './profile.css'
 
 export default function Profile() {
-  const [refetch, setRefetch] = useState(0);
   const [storeAvatar, setStoreAvatar] = useState('')
   const [storeBanner, setStoreBanner] = useState('')
   const [loadingAvatar, setloadingAvatar] = useState(false)
@@ -74,6 +73,7 @@ export default function Profile() {
   }
   async function createStore(e: any) {
     e.preventDefault()
+    setVisible(false)
     const { storeName, storeDescription } = formInput;
     if (storeName && storeDescription && user) {
       const createData = new FormData()
@@ -202,7 +202,6 @@ export default function Profile() {
                                     <path d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3z" />
                                   </svg>
                                   <p className='click-to-upload'><span style={{ fontWeight: "600" }}>Avatar</span></p>
-                                  {/* <p className="format-text">SVG, PNG, JPG or GIF (MAX. 800x400px)</p> */}
                                 </div>
                               </label>
                               <input ref={avatarRef} id='Img' type="file" name="Asset" style={{ display: "none" }}
@@ -213,7 +212,6 @@ export default function Profile() {
                         </>
                     }
                   </div>
-                  {/* // */}
                   <div className='upload-frame banner'>
                     {
                       loadingBanner === true

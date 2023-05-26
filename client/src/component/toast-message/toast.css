@@ -28,15 +28,16 @@
     font-weight: 500;
 }
 
+.toast-class.error{
+    background-color: rgb(179, 72, 72);
+}
+
 .toast-class svg{
     margin-left: 8px;
 }
 
 .toast-class span{
    padding: 12px;
-    /* overflow-y: scroll; */
-    /* max-width: 91%; */
-    /* max-height: 60px; */
 }
 @keyframes toast-slide-left {
     from {

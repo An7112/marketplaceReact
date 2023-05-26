@@ -48,7 +48,7 @@ export default function ShoppingCart({ propsCallback }: any) {
     }, [modalRef]);
 
     const totalPrice = shoppingCart.reduce((a: any, c: any) =>
-        a + (c.price * 1), 0
+        a + (c.productPrice * 1), 0
     );
 
     function clearAllItem() {

@@ -10,7 +10,6 @@ interface Props {
   isloading: boolean,
 }
 
-
 const PaginatedList: React.FC<Props> = ({ storeInfo, isloading }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, _] = useState(10);
@@ -41,10 +40,10 @@ const PaginatedList: React.FC<Props> = ({ storeInfo, isloading }) => {
               Store
             </span>
             <span className='item-3'>
-              Gross product
+              Total number of products
             </span>
             <span className='item-3'>
-              Store creation date
+              Founding
             </span>
           </div>
           {
@@ -82,10 +81,10 @@ const PaginatedList: React.FC<Props> = ({ storeInfo, isloading }) => {
               Store
             </span>
             <span className='item-3'>
-              Gross product
+              Total number of products
             </span>
             <span className='item-3'>
-              Store creation date
+              Founding
             </span>
           </div>
           {

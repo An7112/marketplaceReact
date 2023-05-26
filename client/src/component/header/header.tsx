@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { loginWithGoogle, logoutUser, restoreUser } from 'store/actions/auth'
 import ShoppingCart from 'component/shopping-cart/shopping-cart'
 import { CartModal } from 'modal/index'
+import { Link } from 'react-router-dom'
 
 export default function Header() {
     const dispatch = useDispatch();
@@ -23,7 +24,7 @@ export default function Header() {
     useEffect(() => {
         const productsInCart: CartModal[] = JSON.parse(localStorage.getItem('cart') || '[]');
         setCartCount(productsInCart.length);
-    },[countInCart])
+    }, [countInCart])
     const handleLoginWithGoogle = () => {
         dispatch(loginWithGoogle() as any);
     };
@@ -59,24 +60,25 @@ export default function Header() {
     const callbackOpenCart = (callbackData: boolean) => {
         setOpenCart(callbackData)
     }
-    console.log(openCart)
     return (
         <>
             <div className='header'>
                 {
                     openCart === true
-                    ?
-                    <ShoppingCart propsCallback={callbackOpenCart} />
-                    : ''
+                        ?
+                        <ShoppingCart propsCallback={callbackOpenCart} />
+                        : ''
                 }
                 {userInfoVisible === true
                     && <div className='dropdown' ref={modalRef}>
                         <AiOutlineCaretDown className='down-icon' />
                         <div className='dropdown-frame'>
-                            <div className='dropdown-item'>
-                                <BiUser />
-                                <p>Profile</p>
-                            </div>
+                            <Link to={'/profile'}>
+                                <div className='dropdown-item'>
+                                    <BiUser />
+                                    <p>Profile</p>
+                                </div>
+                            </Link>
                             <div className='dropdown-item'>
                                 <IoSettingsOutline />
                                 <p>Settings</p>
