@@ -40,12 +40,12 @@
     border-radius: 9999px;
     display: flex;
     align-items: center;
+    border: 1px solid #313b3a;
     justify-content: center;
     position: absolute;
     z-index: 1;
     top:  calc(var(--spacing-sm) + 4px);
     right: calc(var(--spacing-sm) + 4px);
-    border: none;
     cursor: pointer;
     background-color: #2a2d3ed7;
 }
