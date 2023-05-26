@@ -6,7 +6,7 @@
 .title-page {
     font-size: 22px;
     font-weight: 700;
-    color: black;
+    color: var(--text-color);
 }
 
 .profile-container {
@@ -48,6 +48,10 @@
 .grid-col-span-3 {
     display: grid;
     width: 100%;
+}
+
+.title-row{
+    color: var(--text-color);
 }
 
 .grid-col-span-3 .frame-span-3 {
@@ -108,7 +112,7 @@
     width: 100%;
     box-sizing: border-box;
     height: 100%;
-    background-color: #f4f7fe;
+    background-color: var(--bg-contrast);
     border-radius: 0.75rem;
     border-style: dashed;
     cursor: pointer;
@@ -177,8 +181,8 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
-    background-color: white;
-    border-color: aliceblue;
+    background-color: var(--bg-contrast);
+    border-color: var(--bg-contrast);
     border-width: 4px;
     padding: 4px;
     border-radius: 999999px;
@@ -206,7 +210,7 @@
 h4 {
     font-size: 1.25rem;
     font-weight: 700;
-    color: black;
+    color: var(--text-color);
 }
 
 .text-base {
@@ -354,8 +358,8 @@ textarea {
     width: 100%;
     border: 1px solid #bff0e8;
     border-radius: 4px;
-    background-color: white;
-    color: black;
+    background-color: var(--bg-contrast);
+    color: var(--text-color);
 }
 
 .upload-frame:hover .clear-button {
@@ -418,8 +422,8 @@ textarea {
     display: block;
     width: 100%;
     border-radius: 4px;
-    color: black;
-    background-color: white;
+    color: var(--text-color);
+    background-color: var(--bg-contrast);
 }
 
 @media (min-width: 1282px) {
@@ -462,6 +466,7 @@ textarea {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
+    color: var(--text-color);
 }
 
 .class-flex-col-bottom .line-percent {
@@ -478,6 +483,11 @@ textarea {
     padding-right: 2rem !important;
     text-align: center;
     font-size: 14px;
+    color: var(--text-color);
+}
+
+.class-flex-col h3{
+    color: var(--text-color);
 }
 
 .class-flex-col .cloud-button {
@@ -487,7 +497,8 @@ textarea {
     align-items: center;
     justify-content: center;
     border: none;
-    background-color: #f4f7fe;
+    color: var(--text-color);
+    background-color: var(--bg-contrast);
 }
 
 .cloud-button svg {
@@ -496,7 +507,7 @@ textarea {
 }
 
 .dot-button {
-    background-color: #f4f7fe;
+    background-color: var(--bg-contrast);
     border-radius: 4px;
     padding: var(--spacing-xs);
     display: flex;
@@ -507,7 +518,7 @@ textarea {
 }
 
 .dot-button:hover {
-    background-color: #e0e7f8;
+    background-color: #1c212b;
 }
 .dot-button svg {
     color: var(--main-major);

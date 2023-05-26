@@ -40,7 +40,7 @@
     flex-direction: row;
     justify-content: flex-start;
     gap: 16px;
-    color: black;
+    color:var(--text-color);
     font-size: 24px;
 }
 
@@ -58,7 +58,7 @@
 
 .infomation-form-content h3 {
     font-size: 20px;
-    color: black;
+    color: var(--text-color);
     line-height: 18px;
     font-weight: 500;
     margin-bottom: 16px;
@@ -66,7 +66,7 @@
 
 .infomation-form-content p {
     font-size: 15px;
-    color: black;
+    color: var(--text-color);
     line-height: 24px;
     text-align: left;
 }
@@ -109,13 +109,12 @@
     width: 100%;
     border: 1px solid #bff0e8;
     border-radius: 4px;
-    background-color: white;
-    color: black;
+    background-color: var(--bg-contrast);
+    color: var(--text-color);
 }
 
 .div-label-input.full textarea:focus {
     outline: none;
-    background-color: #f5f5f5;
 }
 
 .content-form-top-grid .div-img {
@@ -138,8 +137,8 @@
     border-radius: 4px;
     padding: 0.8rem 0;
     cursor: pointer;
-    background-color: #f5f5f5;
-    color: #384a6e;
+    background-color: var(--bg-contrast);
+    color: var(--text-color);
     transition: all ease-in-out 0.3s;
     box-sizing: border-box;
     border: 2px solid #bff0e8;
@@ -160,7 +159,7 @@
     border-radius: 4px;
     padding: 0.8rem 0;
     cursor: pointer;
-    background-color: #f5f5f5;
+    background-color: var(--bg-contrast);
     color: #384a6e;
     transition: all ease-in-out 0.3s;
     box-sizing: border-box;
@@ -193,13 +192,12 @@
     display: block;
     width: 100%;
     border-radius: 4px;
-    color: black;
-    background-color: white;
+    color: var(--text-color);
+    background-color: var(--bg-contrast);
 }
 
 .div-label-input input:focus {
     outline: none;
-    background-color: #f5f5f5;
 }
 
 .div-img .clear-button {
@@ -259,7 +257,7 @@
     width: 100%;
     box-sizing: border-box;
     height: 256px;
-    background-color: white;
+    background-color: var(--bg-contrast);
     border-radius: 4px;
     border-style: dashed;
     cursor: pointer;

@@ -312,7 +312,7 @@ export default function Profile() {
           </div>
         </div>
       </div>
-      <h3>My products</h3>
+      <h3 className="title-row">My products</h3>
       <PaginatedList url={`product/${user?.uid}`} isloading={isLoading} paginatedData={myProducts} />
     </div>
   )

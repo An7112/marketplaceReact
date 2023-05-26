@@ -66,7 +66,7 @@ function StoreDetails() {
 
   return (
     <>
-      <h3 className='title-page'>Products</h3>
+      <h3 className='title-page store'>Products</h3>
       <div className='list-item'>
         {isloading === true
           ? <LoadingFrame divWidth={'240px'} divHeight={'244px'} spacing={'0.5rem'} />

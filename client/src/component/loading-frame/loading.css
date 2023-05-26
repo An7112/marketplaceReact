@@ -5,7 +5,7 @@
 
 .div-load {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    background-color: #dddfe4;
+    background-color: var(--bg-contrast);
     border-radius: 8px;
     margin-bottom: var(--spacing-sm);
 }

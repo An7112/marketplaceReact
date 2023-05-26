@@ -113,7 +113,7 @@ export default function Header() {
                         </div>
                         <div className='class-avatar' >
                             <span className='span-frame' onClick={toggleUserInfoVisible}>
-                                <img className='img-avatar' alt='' src={user ? user.photoURL : '/media/avatar.avif'} />
+                                <img className='img-avatar' alt='user' src={user ? user.photoURL : '/media/avatar.avif'} />
                             </span>
                         </div>
                     </div>

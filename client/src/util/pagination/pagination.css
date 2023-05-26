@@ -25,14 +25,15 @@
 }
 
 .paginated-item.items:hover {
-    background-color: rgb(245, 245, 245);
+    background-color: var(--bg-contrast);
     cursor: pointer;
 }
 
-.paginated-item.items{
-    border-bottom: 1px solid rgb(245, 245, 245);
+.line{
+    width: 100%;
+    height: 1px;
+    background-color: var(--bg-contrast);
 }
-
 .item-name {
     display: grid;
     grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -49,6 +50,7 @@
     width: 90%;
     white-space: nowrap;
     text-overflow: ellipsis;
+    color: var(--text-color);
 }
 
 .item-name .img-avatar {
@@ -66,6 +68,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 15px;
+    color: var(--text-color);
 }
 
 .class-pagination-action {

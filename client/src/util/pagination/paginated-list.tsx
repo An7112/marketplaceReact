@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Pagination from './pagination';
 import './pagination.css'
-import { PaginatedModal, StoreInfoModal } from 'modal/index';
+import { PaginatedModal } from 'modal/index';
 import { Link } from 'react-router-dom';
 import { LoadingFrame } from 'component/loading-frame/loadingFrame';
 
@@ -16,7 +16,7 @@ const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, _] = useState(10);
   const [checkDatalength, setCheckDatalength] = useState(false);
- 
+
   useEffect(() => {
     if (paginatedData.length < 6) {
       setCheckDatalength(true);
@@ -55,24 +55,27 @@ const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url }) => {
                 0,
                 checkDatalength ? Math.ceil(pagedItems.length / 2) : 5)
                 .map((element: PaginatedModal, index: number) => (
-                  <Link to={`/${url}/${element._id}`}>
-                    <div className='paginated-item items'>
-                      <div className='item-name'>
-                        <div className='class-img'>
-                          <span className='span-frame'>
-                            <img className='img-avatar' alt='' src={element.img} />
-                          </span>
+                  <>
+                    <Link to={`/${url}/${element._id}`}>
+                      <div className='paginated-item items'>
+                        <div className='item-name'>
+                          <div className='class-img'>
+                            <span className='span-frame'>
+                              <img className='img-avatar' alt='' src={element.img} />
+                            </span>
+                          </div>
+                          <span className='item-name-store'>{element.name}</span>
                         </div>
-                        <span className='item-name-store'>{element.name}</span>
+                        <span className='item-3'>
+                          {element.quantity}
+                        </span>
+                        <span className='item-3'>
+                          {element.createdDate}
+                        </span>
                       </div>
-                      <span className='item-3'>
-                        {element.quantity}
-                      </span>
-                      <span className='item-3'>
-                        {element.createdDate}
-                      </span>
-                    </div>
-                  </Link>
+                    </Link>
+                    <div className='line'></div>
+                  </>
                 ))
           }
         </div>
@@ -95,24 +98,27 @@ const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url }) => {
               : pagedItems.slice(
                 checkDatalength ? Math.ceil(pagedItems.length / 2) : 5, 10)
                 .map((element: PaginatedModal) => (
-                  <Link to={`/${url}/${element._id}`}>
-                    <div className='paginated-item items'>
-                      <div className='item-name'>
-                        <div className='class-img'>
-                          <span className='span-frame'>
-                            <img className='img-avatar' alt='' src={element.img} />
-                          </span>
+                  <>
+                    <Link to={`/${url}/${element._id}`}>
+                      <div className='paginated-item items'>
+                        <div className='item-name'>
+                          <div className='class-img'>
+                            <span className='span-frame'>
+                              <img className='img-avatar' alt='' src={element.img} />
+                            </span>
+                          </div>
+                          <span className='item-name-store'>{element.name}</span>
                         </div>
-                        <span className='item-name-store'>{element.name}</span>
+                        <span className='item-3'>
+                          {element.quantity}
+                        </span>
+                        <span className='item-3'>
+                          {element.createdDate}
+                        </span>
                       </div>
-                      <span className='item-3'>
-                        {element.quantity}
-                      </span>
-                      <span className='item-3'>
-                        {element.createdDate}
-                      </span>
-                    </div>
-                  </Link>
+                    </Link>
+                    <div className='line'></div>
+                  </>
                 ))
           }
 
