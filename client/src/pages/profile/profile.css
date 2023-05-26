@@ -10,9 +10,7 @@
 }
 
 .profile-container {
-    margin-top: 1.25rem;
-    min-height: 84vh;
-    height: 100%;
+    margin: 1.25rem 0;
 }
 
 .profile-container .container-flex-full {

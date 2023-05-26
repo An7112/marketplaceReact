@@ -1,25 +1,27 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Pagination from './pagination';
 import './pagination.css'
-import { StoreInfoModal } from 'modal/index';
+import { PaginatedModal, StoreInfoModal } from 'modal/index';
 import { Link } from 'react-router-dom';
 import { LoadingFrame } from 'component/loading-frame/loadingFrame';
 
 interface Props {
-  storeInfo: StoreInfoModal[];
+  paginatedData: PaginatedModal[];
   isloading: boolean,
+  column?: number,
+  url?: string,
 }
 
-const PaginatedList: React.FC<Props> = ({ storeInfo, isloading }) => {
+const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, _] = useState(10);
   const [checkDatalength, setCheckDatalength] = useState(false);
-
+ 
   useEffect(() => {
-    if (storeInfo.length < 6) {
+    if (paginatedData.length < 6) {
       setCheckDatalength(true);
     }
-  }, [storeInfo])
+  }, [paginatedData])
   const handlePageChange = (selectedPage: number) => {
     setCurrentPage(selectedPage);
   };
@@ -28,8 +30,8 @@ const PaginatedList: React.FC<Props> = ({ storeInfo, isloading }) => {
   const pagedItems = useMemo(() => {
     const startIndex = offset;
     const endIndex = offset + itemsPerPage;
-    return storeInfo.slice(startIndex, endIndex);
-  }, [offset, itemsPerPage, storeInfo]);
+    return paginatedData.slice(startIndex, endIndex);
+  }, [offset, itemsPerPage, paginatedData]);
 
   return (
     <>
@@ -37,13 +39,13 @@ const PaginatedList: React.FC<Props> = ({ storeInfo, isloading }) => {
         <div className='paginated-column'>
           <div className='paginated-item paginated-header'>
             <span className='item-name'>
-              Store
+              Name
             </span>
             <span className='item-3'>
-              Total number of products
+              Quantity
             </span>
             <span className='item-3'>
-              Founding
+              Date created
             </span>
           </div>
           {
@@ -52,22 +54,22 @@ const PaginatedList: React.FC<Props> = ({ storeInfo, isloading }) => {
               : pagedItems.slice(
                 0,
                 checkDatalength ? Math.ceil(pagedItems.length / 2) : 5)
-                .map((element: StoreInfoModal, index: number) => (
-                  <Link to={`/store/${element._id}`}>
+                .map((element: PaginatedModal, index: number) => (
+                  <Link to={`/${url}/${element._id}`}>
                     <div className='paginated-item items'>
                       <div className='item-name'>
                         <div className='class-img'>
                           <span className='span-frame'>
-                            <img className='img-avatar' alt='' src={element.storeAvatar} />
+                            <img className='img-avatar' alt='' src={element.img} />
                           </span>
                         </div>
-                        <span className='item-name-store'>{element.storeName}</span>
+                        <span className='item-name-store'>{element.name}</span>
                       </div>
                       <span className='item-3'>
-                        {element.storeProductLength}
+                        {element.quantity}
                       </span>
                       <span className='item-3'>
-                        {element.date}
+                        {element.createdDate}
                       </span>
                     </div>
                   </Link>
@@ -78,13 +80,13 @@ const PaginatedList: React.FC<Props> = ({ storeInfo, isloading }) => {
         <div className='paginated-column'>
           <div className='paginated-item paginated-header'>
             <span className='item-name'>
-              Store
+              Name
             </span>
             <span className='item-3'>
-              Total number of products
+              Quantity
             </span>
             <span className='item-3'>
-              Founding
+              Date created
             </span>
           </div>
           {
@@ -92,22 +94,22 @@ const PaginatedList: React.FC<Props> = ({ storeInfo, isloading }) => {
               ? <LoadingFrame divHeight={'87px'} divWidth={'100%'} />
               : pagedItems.slice(
                 checkDatalength ? Math.ceil(pagedItems.length / 2) : 5, 10)
-                .map((element: StoreInfoModal) => (
-                  <Link to={`/store/${element._id}`}>
+                .map((element: PaginatedModal) => (
+                  <Link to={`/${url}/${element._id}`}>
                     <div className='paginated-item items'>
                       <div className='item-name'>
                         <div className='class-img'>
                           <span className='span-frame'>
-                            <img className='img-avatar' alt='' src={element.storeAvatar} />
+                            <img className='img-avatar' alt='' src={element.img} />
                           </span>
                         </div>
-                        <span className='item-name-store'>{element.storeName}</span>
+                        <span className='item-name-store'>{element.name}</span>
                       </div>
                       <span className='item-3'>
-                        {element.storeProductLength}
+                        {element.quantity}
                       </span>
                       <span className='item-3'>
-                        {element.date}
+                        {element.createdDate}
                       </span>
                     </div>
                   </Link>
@@ -118,7 +120,7 @@ const PaginatedList: React.FC<Props> = ({ storeInfo, isloading }) => {
 
       </div>
       <Pagination
-        pageCount={Math.ceil(storeInfo.length / itemsPerPage)}
+        pageCount={Math.ceil(paginatedData.length / itemsPerPage)}
         onPageChange={handlePageChange}
         initialPage={currentPage}
       />

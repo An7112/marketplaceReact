@@ -5,11 +5,12 @@ import { TbFileDescription } from 'react-icons/tb'
 import { client } from "util/infura-ipfs/ipfs";
 import { BsThreeDots } from 'react-icons/bs'
 import axios from 'axios';
-import { Messages, StoreInfoModal } from 'modal/index'
+import { Messages, PaginatedModal, ProductModal, StoreInfoModal } from 'modal/index'
 import { useSelector } from "react-redux";
 import { ToastMessage } from 'component/toast-message'
 import QueryLoading from "component/query-loading/query-loading";
 import './profile.css'
+import PaginatedList from "util/pagination/paginated-list";
 
 export default function Profile() {
   const [storeAvatar, setStoreAvatar] = useState('')
@@ -24,6 +25,8 @@ export default function Profile() {
   const [isloading, setisLoading] = useState(false);
   const [message, setMessage] = useState<Messages>({ title: null, status: null, description: null });
   const [refetch, setRefetch] = useState(0);
+  const [myProducts, setMyProducts] = useState<PaginatedModal[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const user = useSelector((state: any) => state.auth.user);
 
@@ -36,6 +39,32 @@ export default function Profile() {
     }
     getStoreInfo()
   }, [user, refetch])
+
+  useEffect(() => {
+    async function getProducs() {
+      setIsLoading(true)
+      if (user) {
+        try{
+          const products = await axios.get(`http://localhost:9000/api/products?owner=${user.uid}`)
+        const convertPaginatedData: PaginatedModal[] = products.data.map((item: ProductModal) => {
+          return {
+            _id: item._id,
+            img: item.productIMG,
+            name: item.productName,
+            quantity: item.quantity,
+            createdDate: item.date,
+          }
+        })
+        setMyProducts(convertPaginatedData);
+        }catch(error){
+          console.log(error);
+        }finally{
+          setIsLoading(false)
+        }
+      }
+    }
+    getProducs();
+  }, [user])
 
   async function onChangeImageAvatar(e?: any) {
     setloadingAvatar(true)
@@ -96,7 +125,7 @@ export default function Profile() {
 
       } catch (error) {
         console.log(error);
-      }finally{
+      } finally {
         setRefetch(prev => prev + 1);
         setisLoading(false)
       }
@@ -117,13 +146,12 @@ export default function Profile() {
     }
   }
 
-
   return (
     <div className='profile-main'>
       {visible === true ? <ToastMessage
         {...message}
       /> : ''}
-       {isloading === true && <QueryLoading/>}
+      {isloading === true && <QueryLoading />}
       <h3 className='title-page'>Profile</h3>
       <div className='profile-container'>
         <div className='container-flex-full'>
@@ -284,6 +312,8 @@ export default function Profile() {
           </div>
         </div>
       </div>
+      <h3>My products</h3>
+      <PaginatedList url={`product/${user?.uid}`} isloading={isLoading} paginatedData={myProducts} />
     </div>
   )
 }

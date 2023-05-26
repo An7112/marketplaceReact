@@ -6,12 +6,12 @@ export type sidebarModal = {
 
 export type StoreInfoModal = {
     _id: string,
-    storeName: string,
-    storeDescription: string,
-    storeAvatar: string,
-    storeBanner: string,
-    storeProductLength: number,
-    date: any
+    storeName?: string,
+    storeDescription?: string,
+    storeAvatar?: string,
+    storeBanner?: string,
+    storeProductLength?: number,
+    date?: any
 }
 
 export type Messages = {
@@ -35,4 +35,12 @@ export type CartModal = {
     owner: string,
     id: string,
     qty: number
+}
+
+export type PaginatedModal = {
+    _id: string,
+    img: string,
+    name: string,
+    quantity: number,
+    createdDate: any,
 }
