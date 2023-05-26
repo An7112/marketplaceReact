@@ -10,6 +10,7 @@ import { Messages } from 'modal/index'
 import './create.css'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
+import QueryLoading from 'component/query-loading/query-loading'
 
 export default function CreateItem() {
   const [imageURL, setImageURL] = useState('')
@@ -23,6 +24,7 @@ export default function CreateItem() {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState<Messages>({ title: null, status: null, description: null });
   const user = useSelector((state: any) => state.auth.user);
+  const [isloading, setIsLoading] = useState(false);
 
   const inputRef = useRef<any>(null);
 
@@ -55,6 +57,7 @@ export default function CreateItem() {
 
   async function handleSubmit() {
     setVisible(false);
+    setIsLoading(true);
     if (user) {
       const {productName, productPrice, productDescription, quantity} = formInput;
       const createData = new FormData()
@@ -73,6 +76,8 @@ export default function CreateItem() {
         setVisible(true);
       }catch(error){
        console.log(error);
+      }finally{
+        setIsLoading(false);
       }
     }
   }
@@ -88,6 +93,7 @@ export default function CreateItem() {
       {visible === true ? <ToastMessage
         {...message}
       /> : ''}
+      {isloading === true && <QueryLoading/>}
       <div className='create-nft-body'>
         <div className='div-form'>
           <div className='grid-form'>

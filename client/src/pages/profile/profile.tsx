@@ -9,6 +9,7 @@ import { Messages, StoreInfoModal } from 'modal/index'
 import { useSelector } from "react-redux";
 import { ToastMessage } from 'component/toast-message'
 import './profile.css'
+import QueryLoading from "component/query-loading/query-loading";
 
 export default function Profile() {
   const [storeAvatar, setStoreAvatar] = useState('')
@@ -20,6 +21,7 @@ export default function Profile() {
   const bannerRef = useRef<any>(null);
   const [storeInfo, setStoreInfo] = useState<StoreInfoModal>()
   const [visible, setVisible] = useState(false);
+  const [isloading, setisLoading] = useState(false);
   const [message, setMessage] = useState<Messages>({ title: null, status: null, description: null });
 
   const user = useSelector((state: any) => state.auth.user);
@@ -73,6 +75,7 @@ export default function Profile() {
   }
   async function createStore(e: any) {
     e.preventDefault()
+    setisLoading(true)
     setVisible(false)
     const { storeName, storeDescription } = formInput;
     if (storeName && storeDescription && user) {
@@ -92,6 +95,8 @@ export default function Profile() {
 
       } catch (error) {
         console.log(error);
+      }finally{
+        setisLoading(false)
       }
     }
   }
@@ -116,6 +121,7 @@ export default function Profile() {
       {visible === true ? <ToastMessage
         {...message}
       /> : ''}
+       {isloading === true && <QueryLoading/>}
       <h3 className='title-page'>Profile</h3>
       <div className='profile-container'>
         <div className='container-flex-full'>

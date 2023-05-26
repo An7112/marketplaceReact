@@ -2,13 +2,14 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { AiFillExclamationCircle, AiFillRest } from 'react-icons/ai'
 import { IoMdClose } from 'react-icons/io'
 import { TbShoppingCartDiscount } from 'react-icons/tb'
-import './shopping.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { CartModal, ProductModal } from 'modal/index'
 import { setCountInCart } from 'store/reducers/state'
 import { removeFromCart } from 'util/cart/cart'
 import axios from 'axios'
 import { LoadingFrame } from 'component/loading-frame/loadingFrame'
+import './shopping.css'
+
 export default function ShoppingCart({ propsCallback }: any) {
 
     const dispatch = useDispatch();
@@ -164,7 +165,7 @@ export default function ShoppingCart({ propsCallback }: any) {
                         <footer>
                             <div className='footer-inner'>
                                 <span className='footer-title'>Total price</span>
-                                <span>{totalPrice} HCMA</span>
+                                <span>{totalPrice} USD</span>
                             </div>
                         </footer>
                         <div className='class-button'>
