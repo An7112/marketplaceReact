@@ -22,7 +22,7 @@ export default function Sidebar() {
                 key={item.name}
                 style={({ isActive }) => ({
                   borderRight: isActive ? '4px solid black' : '',
-                  backgroundColor: isActive ? '#f5f5f5' : ''
+                  backgroundColor: isActive ? '#1a1c29' : ''
                 })}
                 className='nav-link'
               >
