@@ -129,9 +129,9 @@ export default function Profile() {
             <div className='grid-col-span-4'>
               <div className='frame-user'>
                 <div className='banner-user'>
-                  <img className="store-banner" src={storeInfo ? storeInfo.storeBanner : 'media/banner.jpg'} alt="" />
+                  <img className="store-banner" src={user ? storeInfo?.storeBanner : 'media/banner.jpg'} alt="" />
                   <div className='user'>
-                    <img src={storeInfo ? storeInfo.storeAvatar : 'media/avatar.avif'} alt='' />
+                    <img src={user ? storeInfo?.storeAvatar : 'media/avatar.avif'} alt='' />
                   </div>
                 </div>
                 <div className='frame-username'>
@@ -140,7 +140,7 @@ export default function Profile() {
                 </div>
                 <div className='frame-username-dsc'>
                   <div className='dsc-item'>
-                    <h4>{storeInfo?.storeProductLength ? storeInfo?.storeProductLength : 0}</h4>
+                    <h4>{user && storeInfo?.storeProductLength ? storeInfo?.storeProductLength : 0}</h4>
                     <p className='text-base'>Products</p>
                   </div>
                   <div className='dsc-item'>
