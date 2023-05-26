@@ -17,7 +17,7 @@
     bottom: 48px;
     z-index: 90;
     height: calc(((100% - 0px) - 0px) - 48px);
-    background-color: white;
+    background-color: var(--bg-contrast);
     border: 1px solid rgb(223, 220, 220);
     overflow: auto;
     transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -38,7 +38,7 @@
 
 .cart-outer .shopping-cart {
     padding: 12px;
-    background-color: white;
+    background-color: var(--bg-contrast);
     max-height: 100%;
     overflow: hidden auto;
     display: flex;
@@ -57,13 +57,13 @@
 
 .shopping-cart-name svg {
     font-size: 18px !important;
-    color: black;
+    color: var(--text-color);
 }
 
 .shopping-cart-name h4 {
     font-size: 18px;
     font-weight: 700;
-    color: black;
+    color: var(--text-color);
 }
 
 .fresnel-greater .cart-inner {
@@ -82,7 +82,7 @@
     background: inherit;
     padding: 0.5rem;
     font-size: 18px;
-    background-color: #dbdbdb;
+    background-color: var(--bg-main);
     border-radius: 99999px;
     color: white;
     transition: ease-in-out 0.2s;
@@ -129,7 +129,7 @@
 }
 
 .count-item button span {
-    color: black;
+    color: var(--text-color);
     white-space: nowrap;
     font-weight: 600;
     font-size: 14px;
@@ -141,7 +141,7 @@
 }
 
 .count-item span {
-    color: black;
+    color: var(--text-color);
     font-weight: 600;
     white-space: nowrap;
     font-size: 15px;
@@ -180,7 +180,7 @@
 }
 
 .footer-inner span {
-    color: black;
+    color: var(--text-color);
     white-space: nowrap;
     font-weight: 600;
     font-size: 15px;
@@ -301,7 +301,7 @@
 .content-item-inner .item-name {
     font-weight: 700;
     font-size: 15px;
-    color: black;
+    color: var(--text-color);
     overflow: hidden;
     display: inline-flex;
     align-items: center;
@@ -383,7 +383,7 @@
     font-size: 20px;
     font-weight: 600;
     cursor: pointer;
-    color: black;
+    color: var(--text-color);
 }
 
 .shopping-cart-item .item-price svg:hover {
@@ -393,7 +393,7 @@
 .shopping-cart-item .item-price span {
     font-weight: 600;
     font-size: 14px;
-    color: black;
+    color: var(--text-color);
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;

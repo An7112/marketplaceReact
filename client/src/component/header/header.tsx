@@ -79,10 +79,12 @@ export default function Header() {
                                     <p>Profile</p>
                                 </div>
                             </Link>
+                            <div className='line'></div>
                             <div className='dropdown-item'>
                                 <IoSettingsOutline />
                                 <p>Settings</p>
                             </div>
+                            <div className='line'></div>
                             {user
                                 ?
                                 <div className='dropdown-item' onClick={handleLogout}>
@@ -94,7 +96,6 @@ export default function Header() {
                                     <p>Login</p>
                                 </div>
                             }
-
                         </div>
                     </div>
                 }
