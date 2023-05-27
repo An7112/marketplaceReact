@@ -26,7 +26,7 @@ export default function Profile() {
   const [message, setMessage] = useState<Messages>({ title: null, status: null, description: null });
   const [refetch, setRefetch] = useState(0);
   const [myProducts, setMyProducts] = useState<PaginatedModal[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingQuery, setIsLoadingQuery] = useState(false);
 
   const user = useSelector((state: any) => state.auth.user);
 
@@ -42,24 +42,24 @@ export default function Profile() {
 
   useEffect(() => {
     async function getProducs() {
-      setIsLoading(true)
+      setIsLoadingQuery(true)
       if (user) {
-        try{
+        try {
           const products = await axios.get(`http://localhost:9000/api/products?owner=${user.uid}`)
-        const convertPaginatedData: PaginatedModal[] = products.data.map((item: ProductModal) => {
-          return {
-            _id: item._id,
-            img: item.productIMG,
-            name: item.productName,
-            quantity: item.quantity,
-            createdDate: item.date,
-          }
-        })
-        setMyProducts(convertPaginatedData);
-        }catch(error){
+          const convertPaginatedData: PaginatedModal[] = products.data.map((item: ProductModal) => {
+            return {
+              _id: item._id,
+              img: item.productIMG,
+              name: item.productName,
+              quantity: item.quantity,
+              createdDate: item.date,
+            }
+          })
+          setMyProducts(convertPaginatedData);
+        } catch (error) {
           console.log(error);
-        }finally{
-          setIsLoading(false)
+        } finally {
+          setIsLoadingQuery(false)
         }
       }
     }
@@ -108,30 +108,51 @@ export default function Profile() {
     setisLoading(true)
     setVisible(false)
     const { storeName, storeDescription } = formInput;
-    if (storeName && storeDescription && user) {
-      const createData = new FormData()
-      createData.append("storeId", user.uid)
-      createData.append("storeName", storeName)
-      createData.append("storeDescription", storeDescription)
-      createData.append("storeAvatar", storeAvatar)
-      createData.append("storeBanner", storeBanner)
-      try {
-        await axios.post('http://localhost:9000/api/stores', createData).then(res => setMessage({
-          title: res.data.message,
-          description: res.data.message,
-          status: true
-        }));
-        setVisible(true)
-
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setRefetch(prev => prev + 1);
-        setisLoading(false)
+    if (user != null) {
+      if (storeName && storeDescription) {
+        const createData = new FormData()
+        createData.append("storeId", user.uid)
+        createData.append("storeName", storeName)
+        createData.append("storeDescription", storeDescription)
+        createData.append("storeAvatar", storeAvatar)
+        createData.append("storeBanner", storeBanner)
+        try {
+          await axios.post('http://localhost:9000/api/stores', createData).then(res => setMessage({
+            title: res.data.message,
+            description: res.data.message,
+            status: true
+          }));
+          setTimeout(() => {
+            setVisible(true);
+          }, 0);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setRefetch(prev => prev + 1);
+          setisLoading(false)
+        }
+      } else {
+        setTimeout(() => {
+          setVisible(true);
+        }, 0);
+        setisLoading(false);
+        setMessage({
+          title: "Data cannot be empty.",
+          description: "Data cannot be empty.",
+          status: false
+        })
       }
+    } else {
+      setTimeout(() => {
+        setVisible(true);
+      }, 0);
+      setMessage({
+        title: "You need to login to use this function.",
+        description: "You need to login to use this function.",
+        status: false
+      })
     }
   }
-
   function clearContentAvatar() {
     setStoreAvatar('')
     if (avatarRef.current) {
@@ -313,7 +334,7 @@ export default function Profile() {
         </div>
       </div>
       <h3 className="title-row">My products</h3>
-      <PaginatedList url={`product/${user?.uid}`} isloading={isLoading} paginatedData={myProducts} />
+      <PaginatedList url={`product/${user?.uid}`} isloading={isLoadingQuery} paginatedData={myProducts} />
     </div>
   )
 }
