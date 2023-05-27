@@ -113,6 +113,17 @@
     color: var(--text-color);
 }
 
+.content-form-top-grid .div-label-input .ant-select.select{
+    width: 100%;
+}
+.content-form-top-grid .div-label-input .ant-select.select .ant-select-selector{
+    height: 44px;
+    background-color: var(--bg-contrast);
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
 .div-label-input.full textarea:focus {
     outline: none;
 }

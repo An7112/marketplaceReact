@@ -23,7 +23,8 @@ exports.createProduct = async (req, res) => {
         productPrice,
         productDescription,
         productIMG,
-        quantity
+        quantity,
+        productType
     } = req.body;
     try {
         const existingStore = await StoresSchema.findOne({ _id: owner });
@@ -50,7 +51,8 @@ exports.createProduct = async (req, res) => {
             productPrice,
             productDescription,
             productIMG,
-            quantity: parseInt(quantity)
+            quantity: parseInt(quantity),
+            productType
         });
         const savedProduct = await newProduct.save();
         await StoresSchema.findOneAndUpdate(

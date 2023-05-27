@@ -11,6 +11,7 @@ import './create.css'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import QueryLoading from 'component/query-loading/query-loading'
+import { Select } from 'antd'
 
 export default function CreateItem() {
   const [imageURL, setImageURL] = useState('')
@@ -19,7 +20,8 @@ export default function CreateItem() {
     productName: '',
     productPrice: '',
     productDescription: '',
-    quantity: 0
+    quantity: 0,
+    productType: 'shirts',
   })
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState<Messages>({ title: null, status: null, description: null });
@@ -59,7 +61,7 @@ export default function CreateItem() {
     setVisible(false);
     setIsLoading(true);
     if (user) {
-      const {productName, productPrice, productDescription, quantity} = formInput;
+      const { productName, productPrice, productDescription, quantity, productType } = formInput;
       const createData = new FormData()
       createData.append("owner", user.uid)
       createData.append("productName", productName)
@@ -67,16 +69,17 @@ export default function CreateItem() {
       createData.append("productDescription", productDescription)
       createData.append("quantity", quantity)
       createData.append("productIMG", imageURL)
-      try{
+      createData.append("productType", productType)
+      try {
         await axios.post('http://localhost:9000/api/products', createData).then(res => setMessage({
           title: res.data.message,
           description: res.data.message,
           status: res.data.status
         }))
         setVisible(true);
-      }catch(error){
-       console.log(error);
-      }finally{
+      } catch (error) {
+        console.log(error);
+      } finally {
         setIsLoading(false);
       }
     }
@@ -93,7 +96,7 @@ export default function CreateItem() {
       {visible === true ? <ToastMessage
         {...message}
       /> : ''}
-      {isloading === true && <QueryLoading/>}
+      {isloading === true && <QueryLoading />}
       <div className='create-nft-body'>
         <div className='div-form'>
           <div className='grid-form'>
@@ -137,6 +140,23 @@ export default function CreateItem() {
                         <label htmlFor="Price">QUANTITY <AiOutlineDatabase className='icons' /></label>
                         <input className='input' id='Quantity' type="Number" placeholder="Quantity" pattern='.{1,}' required
                           onChange={e => updateFormInput({ ...formInput, quantity: e.target.value })}
+                        />
+                      </div>
+                      <div className='div-label-input grid2'>
+                      <label htmlFor="product-type">Product Type <TbFileDescription className='icons' /></label>
+                        <Select
+                          labelInValue
+                          className='select'
+                          id='product-type'
+                          defaultValue={{ value: 'shirts', label: 'Shirts' }}
+                          onChange={(value) =>  updateFormInput({ ...formInput, productType: value.value })}
+                          options={[
+                            { value: 'shirts', label: 'Shirts' },
+                            { value: 'shoes', label: 'Shoes' },
+                            { value: 'bags', label: 'Bags' },
+                            { value: 'jewelry', label: 'Jewelry' },
+                            { value: 'electronics', label: 'Electronics' },
+                          ]}
                         />
                       </div>
                       <div className='div-img'>

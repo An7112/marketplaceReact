@@ -9,6 +9,14 @@ import { LoadingFrame } from 'component/loading-frame/loadingFrame';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCountInCart } from 'store/reducers/state';
 import { addToCart, removeFromCart } from 'util/cart/cart';
+import { Select, Slider } from 'antd';
+
+interface Filters {
+  [key: string]: {
+    key: string,
+    value: string | number
+  };
+}
 
 function StoreDetails() {
   const dispatch = useDispatch();
@@ -16,6 +24,8 @@ function StoreDetails() {
   const { storeId } = useParams();
   const [storeProducts, setStoreProducts] = useState<ProductModal[]>([]);
   const [isloading, setIsLoading] = useState(false);
+  const [filters, setFilters] = useState<Filters>({});
+  const [priceValue, setPriceValue] = useState(0);
 
   const [cartItems, setCartItems] = useState<CartModal[]>([]);
   const [count, setCount] = useState(0);
@@ -64,45 +74,116 @@ function StoreDetails() {
     }
   };
 
+  const handleFilterChange = (value: { value: string, label: string }, filterKey: string) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterKey]: {
+        key: value.value,
+        value: value.value
+      },
+    }));
+  };
+
+  const onChange = (newValue: number) => {
+    setPriceValue(newValue)
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      'productPrice': {
+        key: newValue === 0 ? 'default' : '',
+        value: newValue
+      },
+    }));
+  };
+
   const filteredProducts = useMemo(() => {
     const lowercasedTerm = searchItem.toLowerCase();
-    return storeProducts.filter((item: ProductModal) =>
+    const data = storeProducts.filter((item: ProductModal) =>
       item.productName.toLowerCase().includes(lowercasedTerm)
-    );
-  }, [searchItem, storeProducts]);
+    )
+    if (Object.keys(filters).length === 0) {
+      return data; // Không có filter, trả về toàn bộ mảng dữ liệu
+    }
+
+    return data.filter(item => {
+      return Object.entries(filters).every(([key, value]) => {
+        const itemValue = item[key as keyof ProductModal];
+        const checkKey = value.key;
+        const filterValue = value.value;
+        if (checkKey === 'default') {
+          return itemValue;
+        }
+        if(typeof(itemValue) === 'number'){
+          return itemValue === filterValue
+        } else {
+          return itemValue.includes(filterValue);
+        }
+      });
+    });
+  }, [searchItem, storeProducts, filters]);
 
   return (
-    <>
-      <h3 className='title-page store'>Products</h3>
-      <div className='list-item'>
-        {isloading === true
-          ? <LoadingFrame divWidth={'240px'} divHeight={'344px'} spacing={'0.5rem'} />
-          : filteredProducts.map((element: ProductModal) => (
-            <Link to={`/product/${element.owner}/${element._id}`}>
-              <div className='item'>
-                {isInCart(element._id)
-                  ? <button className='add-to-cart' onClick={(event) => handleRemoveFromCart(element._id, element.owner, event)}>
-                    <AiFillHeart />
-                  </button>
-                  : <button className='add-to-cart' onClick={(event) => handleAddToCart(element._id, element.owner, event)}>
-                    <AiOutlineHeart />
-                  </button>
-                }
-
-                <div className='frame-img'>
-                  <span className='span-frame'>
-                    <img src={element.productIMG} className='product-img' alt='' />
-                  </span>
-                </div>
-                <h5 className='item-name'>{element.productName}</h5>
-                <h5 className='item-name blur'>{element.owner}</h5>
-                <span className='product-price'><DiReact /> {element.productPrice}</span>
-              </div>
-            </Link>
-          ))
-        }
+    <div className='main-class'>
+      <div className='class-filter'>
+        <h3 className='title-page store'>Filter</h3>
+        <div className='frame-filter-item'>
+          <span className='category-select'>Product Type</span>
+          <Select
+            labelInValue
+            className='select'
+            defaultValue={{ value: 'default', label: 'All' }}
+            onChange={(value) => handleFilterChange(value, 'productType')}
+            options={[
+              { value: 'default', label: 'All' },
+              { value: 'shirts', label: 'Shirts' },
+              { value: 'shoes', label: 'Shoes' },
+              { value: 'bags', label: 'Bags' },
+              { value: 'jewelry', label: 'Jewelry' },
+              { value: 'electronics', label: 'Electronics' },
+            ]}
+          />
+        </div>
+        <div className='frame-filter-item'>
+          <span className='category-select'>Product Price</span>
+          <Slider
+            min={0}
+            max={20}
+            onChange={onChange}
+            value={typeof priceValue === 'number' ? priceValue : 0}
+          />
+        </div>
       </div>
-    </>
+      <div className='class-item'>
+        <h3 className='title-page store'>Products</h3>
+        <div className='list-item'>
+          {isloading === true
+            ? <LoadingFrame divWidth={'240px'} divHeight={'344px'} spacing={'0.5rem'} />
+            : filteredProducts.map((element: ProductModal) => (
+              <Link to={`/product/${element.owner}/${element._id}`}>
+                <div className='item'>
+                  {isInCart(element._id)
+                    ? <button className='add-to-cart' onClick={(event) => handleRemoveFromCart(element._id, element.owner, event)}>
+                      <AiFillHeart />
+                    </button>
+                    : <button className='add-to-cart' onClick={(event) => handleAddToCart(element._id, element.owner, event)}>
+                      <AiOutlineHeart />
+                    </button>
+                  }
+
+                  <div className='frame-img'>
+                    <span className='span-frame'>
+                      <img src={element.productIMG} className='product-img' alt='' />
+                    </span>
+                  </div>
+                  <h5 className='item-name'>{element.productName}</h5>
+                  <h5 className='item-name blur'>{element.owner}</h5>
+                  <span className='product-price'><DiReact /> {element.productPrice}</span>
+                </div>
+              </Link>
+            ))
+          }
+        </div>
+      </div>
+    </div>
 
   )
 }

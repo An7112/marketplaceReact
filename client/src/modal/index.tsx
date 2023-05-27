@@ -28,7 +28,8 @@ export type ProductModal = {
     productDescription: string,
     productIMG: string,
     quantity: number,
-    date: any
+    date: any,
+    productType: string,
 }
 
 export type CartModal = {
