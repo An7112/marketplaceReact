@@ -11,6 +11,7 @@ import { loginWithGoogle, logoutUser, restoreUser } from 'store/actions/auth'
 import ShoppingCart from 'component/shopping-cart/shopping-cart'
 import { CartModal } from 'modal/index'
 import { Link } from 'react-router-dom'
+import { setSearchValue } from 'store/reducers/state'
 
 export default function Header() {
     const dispatch = useDispatch();
@@ -60,6 +61,11 @@ export default function Header() {
     const callbackOpenCart = (callbackData: boolean) => {
         setOpenCart(callbackData)
     }
+
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const existingValue = event.target.value;
+        dispatch(setSearchValue(existingValue))
+    }
     return (
         <>
             <div className='header'>
@@ -102,7 +108,7 @@ export default function Header() {
                 <div className='frame-header'>
                     <div className='frame-input'>
                         <BiSearch className='icon-search-header' />
-                        <input className='input-header' placeholder='Search or type a command' />
+                        <input onChange={handleSearch} className='input-header' placeholder='Search or type a command' />
                     </div>
                     <div className='frame-info'>
                         <div className='class-icon-header'>

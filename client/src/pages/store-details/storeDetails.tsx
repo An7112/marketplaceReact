@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import './storeDetails.css'
 import { Link, useParams } from 'react-router-dom';
 import { DiReact } from 'react-icons/di'
@@ -12,7 +12,7 @@ import { addToCart, removeFromCart } from 'util/cart/cart';
 
 function StoreDetails() {
   const dispatch = useDispatch();
-  const { countInCart } = useSelector((state: any) => state.state);
+  const { countInCart, searchItem } = useSelector((state: any) => state.state);
   const { storeId } = useParams();
   const [storeProducts, setStoreProducts] = useState<ProductModal[]>([]);
   const [isloading, setIsLoading] = useState(false);
@@ -43,9 +43,9 @@ function StoreDetails() {
       }
     }
     getStoreProducts();
-  }, [storeId])
+  }, [searchItem, storeId])
 
-  const handleAddToCart = (_id: string, owner: string,  event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddToCart = (_id: string, owner: string, event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     addToCart({ owner: owner, id: _id, qty: 1 });
     setCartItems([...cartItems, { owner: owner, id: _id, qty: 1 }]);
@@ -64,33 +64,40 @@ function StoreDetails() {
     }
   };
 
+  const filteredProducts = useMemo(() => {
+    const lowercasedTerm = searchItem.toLowerCase();
+    return storeProducts.filter((item: ProductModal) =>
+      item.productName.toLowerCase().includes(lowercasedTerm)
+    );
+  }, [searchItem, storeProducts]);
+
   return (
     <>
       <h3 className='title-page store'>Products</h3>
       <div className='list-item'>
         {isloading === true
           ? <LoadingFrame divWidth={'240px'} divHeight={'344px'} spacing={'0.5rem'} />
-          : storeProducts.map((element: ProductModal) => (
+          : filteredProducts.map((element: ProductModal) => (
             <Link to={`/product/${element.owner}/${element._id}`}>
-            <div className='item'>
-              {isInCart(element._id)
-                ? <button className='add-to-cart' onClick={(event) => handleRemoveFromCart(element._id, element.owner, event)}>
-                  <AiFillHeart />
-                </button>
-                : <button className='add-to-cart' onClick={(event) => handleAddToCart(element._id, element.owner, event)}>
-                  <AiOutlineHeart />
-                </button>
-              }
+              <div className='item'>
+                {isInCart(element._id)
+                  ? <button className='add-to-cart' onClick={(event) => handleRemoveFromCart(element._id, element.owner, event)}>
+                    <AiFillHeart />
+                  </button>
+                  : <button className='add-to-cart' onClick={(event) => handleAddToCart(element._id, element.owner, event)}>
+                    <AiOutlineHeart />
+                  </button>
+                }
 
-              <div className='frame-img'>
-                <span className='span-frame'>
-                  <img src={element.productIMG} className='product-img' alt='' />
-                </span>
+                <div className='frame-img'>
+                  <span className='span-frame'>
+                    <img src={element.productIMG} className='product-img' alt='' />
+                  </span>
+                </div>
+                <h5 className='item-name'>{element.productName}</h5>
+                <h5 className='item-name blur'>{element.owner}</h5>
+                <span className='product-price'><DiReact /> {element.productPrice}</span>
               </div>
-              <h5 className='item-name'>{element.productName}</h5>
-              <h5 className='item-name blur'>{element.owner}</h5>
-              <span className='product-price'><DiReact /> {element.productPrice}</span>
-            </div>
             </Link>
           ))
         }

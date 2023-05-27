@@ -5,6 +5,7 @@ import { PaginatedModal } from 'modal/index';
 import { Link } from 'react-router-dom';
 import { LoadingFrame } from 'component/loading-frame/loadingFrame';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
 interface Props {
   paginatedData: PaginatedModal[];
   isloading: boolean,
@@ -13,6 +14,8 @@ interface Props {
 }
 
 const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url }) => {
+
+  const { searchItem } = useSelector((state: any) => state.state);
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, _] = useState(10);
   const [checkDatalength, setCheckDatalength] = useState(false);
@@ -30,8 +33,12 @@ const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url }) => {
   const pagedItems = useMemo(() => {
     const startIndex = offset;
     const endIndex = offset + itemsPerPage;
-    return paginatedData.slice(startIndex, endIndex);
-  }, [offset, itemsPerPage, paginatedData]);
+    const lowercasedTerm = searchItem.toLowerCase();
+    const filteredData = paginatedData.filter((item: PaginatedModal) =>
+      item.name.toLowerCase().includes(lowercasedTerm)
+    )
+    return filteredData.slice(startIndex, endIndex);
+  }, [offset, itemsPerPage, searchItem, paginatedData]);
 
   return (
     <>
