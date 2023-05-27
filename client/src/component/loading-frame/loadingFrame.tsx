@@ -7,9 +7,17 @@ interface IProps {
   spacing?: any;
   borderRadius?:any;
   maxDivWidth?:any;
+  bgColor?: string;
 }
-export function LoadingFrame({divWidth, divHeight, spacing, borderRadius, maxDivWidth}:IProps) {
+export function LoadingFrame({divWidth, divHeight, spacing, borderRadius, maxDivWidth, bgColor}:IProps) {
   return (
-    <div className='div-load' style={{width:`${divWidth}`, height:`${divHeight}`, padding:`${spacing}`, borderRadius:`${borderRadius}`, maxWidth:`${maxDivWidth}`}}></div>
+    <div className='div-load' style={{
+      width:`${divWidth}`, 
+      height:`${divHeight}`, 
+      padding:`${spacing}`, 
+      borderRadius:`${borderRadius}`,
+      maxWidth:`${maxDivWidth}`,
+      backgroundColor: `${bgColor}`
+    }}></div>
   )
 }

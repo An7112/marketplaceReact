@@ -4,7 +4,7 @@ import './pagination.css'
 import { PaginatedModal } from 'modal/index';
 import { Link } from 'react-router-dom';
 import { LoadingFrame } from 'component/loading-frame/loadingFrame';
-
+import moment from 'moment';
 interface Props {
   paginatedData: PaginatedModal[];
   isloading: boolean,
@@ -70,7 +70,7 @@ const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url }) => {
                           {element.quantity}
                         </span>
                         <span className='item-3'>
-                          {element.createdDate}
+                          {moment(element.createdDate).format("DD-MM-YYYY")}
                         </span>
                       </div>
                     </Link>
@@ -113,7 +113,7 @@ const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url }) => {
                           {element.quantity}
                         </span>
                         <span className='item-3'>
-                          {element.createdDate}
+                          {moment(element.createdDate).format("DD-MM-YYYY")}
                         </span>
                       </div>
                     </Link>

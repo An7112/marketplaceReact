@@ -69,7 +69,7 @@ function StoreDetails() {
       <h3 className='title-page store'>Products</h3>
       <div className='list-item'>
         {isloading === true
-          ? <LoadingFrame divWidth={'240px'} divHeight={'244px'} spacing={'0.5rem'} />
+          ? <LoadingFrame divWidth={'240px'} divHeight={'344px'} spacing={'0.5rem'} />
           : storeProducts.map((element: ProductModal) => (
             <Link to={`/product/${element.owner}/${element._id}`}>
             <div className='item'>

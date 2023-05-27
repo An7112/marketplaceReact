@@ -129,7 +129,7 @@ export default function ShoppingCart({ propsCallback }: any) {
                         <ul className='list-item'>
                             {
                                 isloading
-                                    ? <LoadingFrame divHeight={'78.38px'} divWidth={'336px'} />
+                                    ? <LoadingFrame divHeight={'78.38px'} divWidth={'336px'} bgColor='#1a1c29'/>
                                     : shoppingCart.map((ele: ProductModal) => (
                                         <div className='shopping-cart-item'>
                                             <div className='box-img-item'>
