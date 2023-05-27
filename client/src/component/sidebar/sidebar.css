@@ -1,5 +1,6 @@
 .class-sidebar {
     width: 280px;
+    min-height: 100vh;
     background-color: var(--bg-contrast);
 }
 
