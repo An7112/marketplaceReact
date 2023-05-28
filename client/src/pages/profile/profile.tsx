@@ -41,7 +41,7 @@ export default function Profile() {
     }
     getStoreInfo()
   }, [user, refetch])
-  
+
   useEffect(() => {
     async function getProducs() {
       setIsLoadingQuery(true)
@@ -51,7 +51,7 @@ export default function Profile() {
             `http://localhost:9000/api/products?owner=${user.uid}&limit=${limit}`
           )
           const productsCount = await axios.get(
-            `http://localhost:9000/api/productCount?owner=${user.uid}`
+            `http://localhost:9000/api/products?owner=${user.uid}&productCount`
           )
           const convertPaginatedData: PaginatedModal[] = products.data.map((item: ProductModal) => {
             return {

@@ -5,30 +5,24 @@ const StoresSchema = require('../model/model')
 
 exports.getProducts = async (req, res) => {
     try {
-        const limit = parseInt(req.query.limit) || 10;
+        const productCount = req.query.productCount;
         const owner = req.query.owner;
         const query = { owner: owner };
-        const allProducts = await ProductsSchema.find(query);
-        const limitData = allProducts.slice(0, limit);
-        res.json(limitData)
+        if (productCount != null) {
+            const allProducts = await ProductsSchema.find(query);
+            const count = allProducts.length;
+            res.json(count);
+        } else {
+            const limit = parseInt(req.query.limit) || 10;
+            const allProducts = await ProductsSchema.find(query);
+            const limitedData = allProducts.slice(0, limit);
+            res.json(limitedData);
+        }
     } catch (err) {
-        res.json({ message: err })
+        res.json({ message: err });
     }
-}
+};
 
-exports.getProductLength = async (req, res) => {
-    try {
-        const owner = req.query.owner;
-        const query = { owner: owner };
-        const allProducts = await ProductsSchema.find(query);
-        const productCount = allProducts.length;
-        res.json(productCount)
-    } catch (err) {
-        res.json({
-            message: err
-        })
-    }
-}
 
 exports.createProduct = async (req, res) => {
     const {
