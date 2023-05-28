@@ -11,9 +11,10 @@ interface Props {
   isloading: boolean,
   column?: number,
   url?: string,
+  count?: number,
 }
 
-const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url }) => {
+const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url, count }) => {
 
   const { searchItem } = useSelector((state: any) => state.state);
   const [currentPage, setCurrentPage] = useState(0);
@@ -133,7 +134,7 @@ const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url }) => {
 
       </div>
       <Pagination
-        pageCount={Math.ceil(paginatedData.length / itemsPerPage)}
+        pageCount={count ?  Math.ceil(count / itemsPerPage) : Math.ceil(paginatedData.length / itemsPerPage)}
         onPageChange={handlePageChange}
         initialPage={currentPage}
       />

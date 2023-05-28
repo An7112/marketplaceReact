@@ -16,6 +16,20 @@ exports.getProducts = async (req, res) => {
     }
 }
 
+exports.getProductLength = async (req, res) => {
+    try {
+        const owner = req.query.owner;
+        const query = { owner: owner };
+        const allProducts = await ProductsSchema.find(query);
+        const productCount = allProducts.length;
+        res.json(productCount)
+    } catch (err) {
+        res.json({
+            message: err
+        })
+    }
+}
+
 exports.createProduct = async (req, res) => {
     const {
         owner,
@@ -29,10 +43,10 @@ exports.createProduct = async (req, res) => {
     try {
         const existingStore = await StoresSchema.findOne({ _id: owner });
         if (!existingStore) {
-            return res.status(201).json({ 
+            return res.status(201).json({
                 message: "Owner not found in store list",
                 status: false,
-             });
+            });
         }
         let existingProduct = await ProductsSchema.findOne({
             owner, productName

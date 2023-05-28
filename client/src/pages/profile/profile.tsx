@@ -27,8 +27,10 @@ export default function Profile() {
   const [refetch, setRefetch] = useState(0);
   const [myProducts, setMyProducts] = useState<PaginatedModal[]>([]);
   const [isLoadingQuery, setIsLoadingQuery] = useState(false);
+  const [paginatedCount, setPaginatedCount] = useState(0);
 
   const user = useSelector((state: any) => state.auth.user);
+  const { limit } = useSelector((state: any) => state.state);
 
   useEffect(() => {
     async function getStoreInfo() {
@@ -39,13 +41,18 @@ export default function Profile() {
     }
     getStoreInfo()
   }, [user, refetch])
-
+  
   useEffect(() => {
     async function getProducs() {
       setIsLoadingQuery(true)
       if (user) {
         try {
-          const products = await axios.get(`http://localhost:9000/api/products?owner=${user.uid}`)
+          const products = await axios.get(
+            `http://localhost:9000/api/products?owner=${user.uid}&limit=${limit}`
+          )
+          const productsCount = await axios.get(
+            `http://localhost:9000/api/productCount?owner=${user.uid}`
+          )
           const convertPaginatedData: PaginatedModal[] = products.data.map((item: ProductModal) => {
             return {
               _id: item._id,
@@ -56,6 +63,7 @@ export default function Profile() {
             }
           })
           setMyProducts(convertPaginatedData);
+          setPaginatedCount(productsCount.data);
         } catch (error) {
           console.log(error);
         } finally {
@@ -64,7 +72,7 @@ export default function Profile() {
       }
     }
     getProducs();
-  }, [user])
+  }, [limit, user])
 
   async function onChangeImageAvatar(e?: any) {
     setloadingAvatar(true)
@@ -334,7 +342,11 @@ export default function Profile() {
         </div>
       </div>
       <h3 className="title-row">My products</h3>
-      <PaginatedList url={`product/${user?.uid}`} isloading={isLoadingQuery} paginatedData={myProducts} />
+      <PaginatedList
+        count={paginatedCount}
+        url={`product/${user?.uid}`}
+        isloading={isLoadingQuery}
+        paginatedData={myProducts} />
     </div>
   )
 }
