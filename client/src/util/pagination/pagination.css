@@ -36,6 +36,7 @@
 .paginated-item {
     width: 100%;
     padding: var(--spacing-xs) var(--spacing-xs);
+    transition: ease-in-out 0.2s;
     display: grid;
     grid-template-columns: repeat(18, minmax(0, 1fr));
 }
