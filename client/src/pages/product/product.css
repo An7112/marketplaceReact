@@ -473,7 +473,7 @@
     font-size: 20px;
 }
 
-.class-offer-content button {
+.class-offer-content .offer-info .handle-buy {
     margin-right: 6px;
     width: 100%;
     max-height: 96%;
@@ -491,7 +491,7 @@
     transition: all ease-in-out 0.3s;
 }
 
-.class-offer-content button:hover {
+.class-offer-content .offer-info .handle-buy:hover {
     transform: scale(1.02);
     background-color: #378161;
     color: white;

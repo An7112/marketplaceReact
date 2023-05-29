@@ -11,12 +11,14 @@ import { GiSelfLove } from 'react-icons/gi'
 import { Link, useParams } from 'react-router-dom';
 import { ProductModal, StoreInfoModal } from 'modal/index';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 function Product() {
   const [loadingDetail, setLoadingDetail] = useState(false);
   const { storeId, productId } = useParams();
   const [storeInfo, setStoreInfo] = useState<StoreInfoModal>();
   const [productInfo, setProductInfo] = useState<ProductModal>();
+  const user = useSelector((state: any) => state.auth.user)
 
   const fetchData = async () => {
     setLoadingDetail(true);
@@ -61,8 +63,6 @@ function Product() {
                 <Properties />
               )
           }
-
-
         </div>
         <div className='collection-detail-right'>
           <div className='chakra-stack'>
@@ -90,9 +90,9 @@ function Product() {
               <div className='chakra-stack-header-right'>
                 <span><GiSelfLove /></span>
                 <span><BsShare /></span>
-               <Link to={'/collection'}>
-               <span><FaHome /></span>
-               </Link>
+                <Link to={'/collection'}>
+                  <span><FaHome /></span>
+                </Link>
                 <span><BiDotsVerticalRounded /></span>
               </div>
             </div>
@@ -143,7 +143,11 @@ function Product() {
                       </div>
                       <div className='class-offer-content'>
                         <div className='offer-info'>
-                          <button>Buy now</button>
+                          {user && user.uid === productInfo?.owner
+                            ? <span className='handle-buy'>You are the owner</span>
+                            : <button className='handle-buy'>Buy now</button>
+                          }
+
                         </div>
                       </div>
                     </div>
