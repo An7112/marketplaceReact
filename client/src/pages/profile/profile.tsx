@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlineLoading, AiOutlineClear, AiOutlineCloud } from 'react-icons/ai'
 import { BiRename } from 'react-icons/bi'
 import { TbFileDescription } from 'react-icons/tb'
@@ -11,6 +11,9 @@ import { ToastMessage } from 'component/toast-message'
 import QueryLoading from "component/query-loading/query-loading";
 import './profile.css'
 import PaginatedList from "util/pagination/paginated-list";
+import { paginatedSchema } from "util/pagination/schema/paginatedSchema";
+import { CustomListView } from "./component/customListView";
+import Pagination from "util/pagination/pagination";
 
 export default function Profile() {
   const [storeAvatar, setStoreAvatar] = useState('')
@@ -174,6 +177,12 @@ export default function Profile() {
       bannerRef.current.value = null;
     }
   }
+
+
+  const Item = useCallback((props: any) => {
+    // return <CustomListView paginatedData={myProducts} url={`product/${user?.uid}`}/>;
+    return <CustomListView {...props} paginatedData={myProducts}/>;
+  }, [myProducts]);
 
   return (
     <div className='profile-main'>
@@ -346,7 +355,11 @@ export default function Profile() {
         count={paginatedCount}
         url={`product/${user?.uid}`}
         isloading={isLoadingQuery}
-        paginatedData={myProducts} />
+        paginatedData={myProducts}
+        column={2}
+        // schema={paginatedSchema}
+        // RowList={Item}
+      />
     </div>
   )
 }

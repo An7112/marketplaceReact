@@ -38,7 +38,12 @@ function Collection() {
         <div className='overview-main'>
             {user && <h3>Welcome back, {user.displayName}</h3>}
             <span className='paginated-title'>All stores</span>
-            <PaginatedList url='store' isloading={isloading} paginatedData={storeInfo} />
+            <PaginatedList 
+            url='store' 
+            isloading={isloading} 
+            paginatedData={storeInfo} 
+            column={2}
+            />
         </div>
     )
 }

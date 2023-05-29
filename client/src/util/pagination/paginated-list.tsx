@@ -12,14 +12,28 @@ interface Props {
   column?: number,
   url?: string,
   count?: number,
+  objectKeys?: Record<string, any>,
+  schema?: {
+    header: string,
+    gridSpan: string,
+  }[],
+  RowList?: React.ComponentType<any>
 }
 
-const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url, count }) => {
+const PaginatedList = (props: Props) => {
+
+  const { paginatedData, isloading, url, count, schema, column } = props;
+  const RowListComponent = props.RowList;
 
   const { searchItem } = useSelector((state: any) => state.state);
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, _] = useState(10);
   const [checkDatalength, setCheckDatalength] = useState(false);
+  const existingColumn = column ?? 1;
+  const paginatedColumn = [];
+  for (let i = 0; i < existingColumn; i++) {
+    paginatedColumn.push(i);
+  }
 
   useEffect(() => {
     if (paginatedData.length < 6) {
@@ -41,98 +55,79 @@ const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url, count }
     return filteredData.slice(startIndex, endIndex);
   }, [offset, itemsPerPage, searchItem, paginatedData]);
 
+  console.log(paginatedColumn)
   return (
     <>
       <div className='paginated-main'>
-        <div className='paginated-column'>
-          <div className='paginated-item paginated-header'>
-            <span className='item-name'>
-              Name
-            </span>
-            <span className='item-3'>
-              Quantity
-            </span>
-            <span className='item-3'>
-              Date created
-            </span>
-          </div>
-          {
-            isloading === true
-              ? <LoadingFrame divHeight={'87px'} divWidth={'100%'} spacing={'0.5rem'} borderRadius={0}/>
-              : pagedItems.slice(
-                0,
-                checkDatalength ? Math.ceil(pagedItems.length / 2) : 5)
-                .map((element: PaginatedModal, index: number) => (
-                  <>
-                    <Link to={`/${url}/${element._id}`}>
-                      <div className='paginated-item items'>
-                        <div className='item-name'>
-                          <div className='class-img'>
-                            <span className='span-frame'>
-                              <img className='img-avatar' alt='' src={element.img} />
+        <div className='paginated-row paginated-header'>
+          {paginatedColumn.map((ele) => (
+            Array.isArray(schema) && schema.length > 0
+              ?
+              <div className='paginated-item'
+                style={{
+                  gridTemplateColumns: `repeat(${schema.length}, minmax(0, 1fr))`
+                }}>
+                {schema.map((element: Record<string, string>) => (
+                  <div className='item-paginated-key'>
+                    {element.header}
+                  </div>
+                ))}
+              </div>
+              : <div className='paginated-item'>
+                <span className='item-name'>
+                  Name
+                </span>
+                <span className='item-3'>
+                  Quantity
+                </span>
+                <span className='item-3'>
+                  Date created
+                </span>
+              </div>
+          ))}
+        </div>
+        {
+          RowListComponent
+            ? <RowListComponent currentPage={currentPage} />
+            : <div className='paginated-row grid-container'>
+              {
+                isloading === true
+                  ? <>
+                    {paginatedColumn.map((ele) => (
+                      <LoadingFrame divHeight={'87px'} divWidth={'100%'} spacing={'0.5rem'} borderRadius={0} />
+                    ))}
+                  </>
+                  : pagedItems
+                    .map((element: PaginatedModal, index: number) => (
+                      <>
+                        <Link to={`/${url}/${element._id}`}>
+                          <div className='paginated-item items'>
+                            <div className='item-name'>
+                              <div className='class-img'>
+                                <span className='span-frame'>
+                                  <img className='img-avatar' alt='' src={element.img} />
+                                </span>
+                              </div>
+                              <span className='item-name-store'>{element.name}</span>
+                            </div>
+                            <span className='item-3'>
+                              {element.quantity}
+                            </span>
+                            <span className='item-3'>
+                              {moment(element.createdDate).format("DD-MM-YYYY")}
                             </span>
                           </div>
-                          <span className='item-name-store'>{element.name}</span>
-                        </div>
-                        <span className='item-3'>
-                          {element.quantity}
-                        </span>
-                        <span className='item-3'>
-                          {moment(element.createdDate).format("DD-MM-YYYY")}
-                        </span>
-                      </div>
-                    </Link>
-                    <div className='line'></div>
-                  </>
-                ))
-          }
-        </div>
+                          <div className='line'></div>
+                        </Link>
+                      </>
+                    ))
+              }
+            </div>
+        }
 
-        <div className='paginated-column'>
-          <div className='paginated-item paginated-header'>
-            <span className='item-name'>
-              Name
-            </span>
-            <span className='item-3'>
-              Quantity
-            </span>
-            <span className='item-3'>
-              Date created
-            </span>
-          </div>
-          {
-            isloading === true
-              ? <LoadingFrame divHeight={'87px'} divWidth={'100%'} borderRadius={0}/>
-              : pagedItems.slice(
-                checkDatalength ? Math.ceil(pagedItems.length / 2) : 5, 10)
-                .map((element: PaginatedModal) => (
-                  <>
-                    <Link to={`/${url}/${element._id}`}>
-                      <div className='paginated-item items'>
-                        <div className='item-name'>
-                          <div className='class-img'>
-                            <span className='span-frame'>
-                              <img className='img-avatar' alt='' src={element.img} />
-                            </span>
-                          </div>
-                          <span className='item-name-store'>{element.name}</span>
-                        </div>
-                        <span className='item-3'>
-                          {element.quantity}
-                        </span>
-                        <span className='item-3'>
-                          {moment(element.createdDate).format("DD-MM-YYYY")}
-                        </span>
-                      </div>
-                    </Link>
-                    <div className='line'></div>
-                  </>
-                ))
-          }
-        </div>
       </div>
       <Pagination
-        pageCount={count ?  Math.ceil(count / itemsPerPage) : Math.ceil(paginatedData.length / itemsPerPage)}
+        pageCount={count ? Math.ceil(count / itemsPerPage) : Math.ceil(paginatedData.length / itemsPerPage)}
         onPageChange={handlePageChange}
         initialPage={currentPage}
       />
