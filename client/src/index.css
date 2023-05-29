@@ -25,6 +25,10 @@ a{
   text-decoration: none;
   color: inherit;
 }
+ul{
+  margin: 0;
+  padding: 0;
+}
 :root {
   --main-major: #55B9A9;
   --bg-contrast: #2a2d3e;
