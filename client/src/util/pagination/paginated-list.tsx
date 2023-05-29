@@ -58,7 +58,7 @@ const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url, count }
           </div>
           {
             isloading === true
-              ? <LoadingFrame divHeight={'87px'} divWidth={'100%'} spacing={'0.5rem'} />
+              ? <LoadingFrame divHeight={'87px'} divWidth={'100%'} spacing={'0.5rem'} borderRadius={0}/>
               : pagedItems.slice(
                 0,
                 checkDatalength ? Math.ceil(pagedItems.length / 2) : 5)
@@ -102,7 +102,7 @@ const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url, count }
           </div>
           {
             isloading === true
-              ? <LoadingFrame divHeight={'87px'} divWidth={'100%'} />
+              ? <LoadingFrame divHeight={'87px'} divWidth={'100%'} borderRadius={0}/>
               : pagedItems.slice(
                 checkDatalength ? Math.ceil(pagedItems.length / 2) : 5, 10)
                 .map((element: PaginatedModal) => (
@@ -129,9 +129,7 @@ const PaginatedList: React.FC<Props> = ({ paginatedData, isloading, url, count }
                   </>
                 ))
           }
-
         </div>
-
       </div>
       <Pagination
         pageCount={count ?  Math.ceil(count / itemsPerPage) : Math.ceil(paginatedData.length / itemsPerPage)}
