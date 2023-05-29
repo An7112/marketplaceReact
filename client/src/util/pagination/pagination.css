@@ -1,14 +1,37 @@
 .paginated-main {
     width: 100%;
-    grid-column: span 8 / span 8;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-xs);
+    height: 300px;
+    border: 1px solid var(--bg-contrast);
+    overflow-y: auto;
+    margin-top: var(--spacing-sm);
+    box-sizing: border-box;
+    border-radius: 6px;
 }
-/* 
+
 .paginated-column{
-    grid-column: span 1 / span 1;
-} */
+    position: relative;
+}
+
+.paginated-item.paginated-header{
+    position: sticky;
+    border-bottom: 1px solid var(--bg-contrast);
+    top: 0;
+    background-color: var(--bg-main);
+    border-radius: 0;
+    z-index: 1;
+}
+
+.paginated-main::-webkit-scrollbar {
+    display: block;
+    width: 5px;
+}
+
+.paginated-main::-webkit-scrollbar-thumb {
+    background: var(--bg-contrast);
+}
 
 .paginated-item {
     width: 100%;
@@ -35,6 +58,7 @@
     background-color: var(--bg-contrast);
 }
 .item-name {
+    color: var(--text-color);
     display: grid;
     grid-template-columns: repeat(6, minmax(0, 1fr));
     grid-column: span 8 / span 8;

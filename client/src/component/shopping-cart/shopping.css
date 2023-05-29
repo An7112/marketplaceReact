@@ -1,4 +1,4 @@
-.cart-frame{
+.cart-frame {
     position: fixed;
     top: 0px;
     right: 0px;
@@ -89,7 +89,7 @@
 }
 
 .cart-inner button:hover {
-    background-color: #5DA5DA;
+    background-color: #5da5da;
 }
 
 .shopping-cart header .fresnel-greater hr {
@@ -201,7 +201,7 @@
     line-height: 22px;
     letter-spacing: 0.01em;
     padding: 8px 12px;
-    background-color: #55B9A9;
+    background-color: #55b9a9;
     border: 2px solid transparent;
     color: white;
 }
@@ -231,11 +231,11 @@
 .list-item::-webkit-scrollbar {
     display: block;
     width: 5px;
-  }
-  
+}
+
 .list-item::-webkit-scrollbar-thumb {
     background: #4c505c;
-  }
+}
 
 .shopping-cart-item .box-img-item {
     display: flex;
