@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import Pagination from './pagination';
 import './pagination.css'
 import { PaginatedModal } from 'modal/index';
@@ -17,17 +17,23 @@ interface Props {
     header: string,
     gridSpan: string,
   }[],
-  RowList?: React.ComponentType<any>
+  defaultData?: any[]
+  RowList?: React.ComponentType<PaginatedRowListProps>
+}
+interface PaginatedRowListProps {
+  currentPage: number;
+  paginatedData: PaginatedModal[];
 }
 
-const PaginatedList = (props: Props) => {
+const PaginatedList = (props:Props) => {
 
-  const { paginatedData, isloading, url, count, schema, column } = props;
+  const { paginatedData, isloading, url, count, schema, column, defaultData } = props;
   const RowListComponent = props.RowList;
 
   const { searchItem } = useSelector((state: any) => state.state);
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, _] = useState(10);
+
   const existingColumn = column ?? 1;
   const paginatedColumn = [];
   for (let i = 0; i < existingColumn; i++) {
@@ -42,17 +48,27 @@ const PaginatedList = (props: Props) => {
   const pagedItems = useMemo(() => {
     const startIndex = offset;
     const endIndex = offset + itemsPerPage;
-    const lowercasedTerm = searchItem.toLowerCase();
+    const lowercasedTerm = searchItem ? searchItem.toLowerCase() : '';
     const filteredData = paginatedData.filter((item: PaginatedModal) =>
-      item.name.toLowerCase().includes(lowercasedTerm)
-    )
+      item.name && item.name.toLowerCase().includes(lowercasedTerm)
+    );
     return filteredData.slice(startIndex, endIndex);
   }, [offset, itemsPerPage, searchItem, paginatedData]);
 
+  const pagedItemsDefault = useMemo(() => {
+    const startIndex = offset;
+    const endIndex = offset + itemsPerPage;
+    const lowercasedTerm = searchItem ? searchItem.toLowerCase() : '';
+    const filteredData = defaultData?.filter((item:any) =>
+      item.productName && item.productName.toLowerCase().includes(lowercasedTerm)
+    ) ?? [];
+    return filteredData.slice(startIndex, endIndex);
+  }, [offset, itemsPerPage, searchItem, defaultData]);
+  
   return (
     <>
       <div className='paginated-main'>
-        <div className='paginated-row paginated-header' style={{gridTemplateColumns: paginatedColumn.length > 1 ? '' : '1fr'}}>
+        <div className='paginated-row paginated-header' style={{ gridTemplateColumns: paginatedColumn.length > 1 ? '' : '1fr' }}>
           {paginatedColumn.map((ele) => (
             Array.isArray(schema) && schema.length > 0
               ?
@@ -84,7 +100,7 @@ const PaginatedList = (props: Props) => {
         </div>
         {
           RowListComponent
-            ? <RowListComponent currentPage={currentPage} />
+            ? <RowListComponent currentPage={currentPage} paginatedData={pagedItemsDefault} />
             : <div className='paginated-row grid-container'>
               {
                 isloading === true
@@ -120,7 +136,6 @@ const PaginatedList = (props: Props) => {
               }
             </div>
         }
-
       </div>
       <Pagination
         pageCount={count ? Math.ceil(count / itemsPerPage) : Math.ceil(paginatedData.length / itemsPerPage)}

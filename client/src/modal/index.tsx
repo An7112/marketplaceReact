@@ -47,6 +47,7 @@ export type PaginatedModal = {
 }
 
 export type PurchaseModal = {
+    _id: string,
     ownerProduct: string,
     productId: string,
     status: string,
