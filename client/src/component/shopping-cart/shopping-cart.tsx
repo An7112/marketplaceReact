@@ -106,22 +106,24 @@ export default function ShoppingCart({ propsCallback }: any) {
     }, [fetchProducts]);
 
     const buyProduct = async () => {
-        setBuyLoading(true);
-        const buyer = user.uid;
-        const products = shoppingCart.map((element) => {
-            return { _id: element._id, quantity: 1 }
-        })
-        try {
-            await axios.post('http://localhost:9000/api/products/buy', { buyer, products }).then(res => setMessage({
-                title: res.data.message,
-                description: res.data.message,
-                status: res.data.status
-            }))
-            setVisible(true);
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setBuyLoading(false)
+        if (shoppingCart.length > 0) {
+            setBuyLoading(true);
+            const buyer = user.uid;
+            const products = shoppingCart.map((element) => {
+                return { _id: element._id, quantity: 1 }
+            })
+            try {
+                await axios.post('http://localhost:9000/api/products/buy', { buyer, products }).then(res => setMessage({
+                    title: res.data.message,
+                    description: res.data.message,
+                    status: res.data.status
+                }))
+                setVisible(true);
+            } catch (error) {
+                console.log(error)
+            } finally {
+                setBuyLoading(false)
+            }
         }
     }
 

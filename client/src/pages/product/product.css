@@ -13,6 +13,7 @@
     max-width: 1200px;
     height: 100%;
     font-size: 15px;
+    margin-top: var(--spacing-sm);
 }
 
 .content-page .collection-detail-left {
@@ -30,7 +31,6 @@
 }
 
 .collection-detail-left img {
-    margin-top: 10px;
     border-radius: 4px;
     object-fit: cover;
     max-width: 90%;

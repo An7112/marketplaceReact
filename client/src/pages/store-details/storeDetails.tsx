@@ -21,6 +21,7 @@ interface Filters {
 function StoreDetails() {
   const dispatch = useDispatch();
   const { countInCart, searchItem } = useSelector((state: any) => state.state);
+  const user = useSelector((state: any) => state.auth.user);
   const { storeId } = useParams();
   const [storeProducts, setStoreProducts] = useState<ProductModal[]>([]);
   const [isloading, setIsLoading] = useState(false);
@@ -112,7 +113,7 @@ function StoreDetails() {
         if (checkKey === 'default') {
           return itemValue;
         }
-        if(typeof(itemValue) === 'number'){
+        if (typeof (itemValue) === 'number') {
           return itemValue === filterValue
         } else {
           return itemValue.includes(filterValue);
@@ -160,13 +161,14 @@ function StoreDetails() {
             : filteredProducts.map((element: ProductModal) => (
               <Link to={`/product/${element.owner}/${element._id}`}>
                 <div className='item'>
-                  {isInCart(element._id)
+                  {user.uid !== storeId ? isInCart(element._id)
                     ? <button className='add-to-cart' onClick={(event) => handleRemoveFromCart(element._id, element.owner, event)}>
                       <AiFillHeart />
                     </button>
                     : <button className='add-to-cart' onClick={(event) => handleAddToCart(element._id, element.owner, event)}>
                       <AiOutlineHeart />
                     </button>
+                    : null
                   }
 
                   <div className='frame-img'>
