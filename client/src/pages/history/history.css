@@ -1,0 +1,65 @@
+.history-main {
+    padding: var(--spacing-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    border: none;
+}
+
+.history-main .history-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.history-header .header-top {
+    display: flex;
+    gap: var(--spacing-xs);
+    border: none;
+}
+
+.history-header .header-top.left {
+    flex-direction: column;
+}
+.history-header .header-top.right {
+    flex-direction: row;
+}
+.header-top.left .header-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.header-top.left .header-dsc {
+    max-width: 100%;
+    display: block;
+    overflow: hidden;
+    font-size: 15px;
+    color: var(--text-color);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.header-top.right .header-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--text-color);
+    background-color: var(--main-major);
+    max-height: 40px;
+    padding: 0 var(--spacing-xs);
+}
+
+.header-top.right .header-button svg{
+    font-size: 22px;
+}
+
+.header-top.right .header-button.order{
+    background-color: #7b54d1;
+}

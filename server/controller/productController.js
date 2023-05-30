@@ -2,6 +2,7 @@
 const mongoose = require('mongoose')
 const ProductsSchema = require('../model/product-model')
 const StoresSchema = require('../model/model')
+const HistorySchema = require('../model/history')
 
 exports.getProducts = async (req, res) => {
     try {
@@ -22,7 +23,6 @@ exports.getProducts = async (req, res) => {
         res.json({ message: err });
     }
 };
-
 
 exports.createProduct = async (req, res) => {
     const {
@@ -68,7 +68,7 @@ exports.createProduct = async (req, res) => {
             { $inc: { storeProductLength: 1 } },
             { new: true }
         );
-
+        res.json(savedProduct)
         res.status(200).json({
             message: "Created a new product successfully!",
             status: true,
@@ -88,3 +88,54 @@ exports.getProductById = async (req, res) => {
         res.json({ message: err })
     }
 }
+
+exports.buyProductById = async (req, res) => {
+    try {
+      const { buyer, products } = req.body;
+      for (const product of products) {
+        const { _id, quantity } = product;
+  
+        const existingProduct = await HistorySchema.findOne({ productId: _id });
+  
+        if (existingProduct) {
+          existingProduct.quantity += parseInt(quantity);
+          await existingProduct.save();
+        } else {
+          const selectedProduct = await ProductsSchema.findById(_id);
+  
+          if (!selectedProduct) {
+            return res.status(404).json({
+              message: `Product with ID ${_id} not found.`,
+              status: false,
+            });
+          }
+  
+          const newPurchase = new HistorySchema({
+            ownerProduct: selectedProduct.owner,
+            productId: _id,
+            status: 'Being transported',
+            productName: selectedProduct.productName,
+            productIMG: selectedProduct.productIMG,
+            productPrice: selectedProduct.productPrice,
+            buyer: buyer,
+            quantity: parseInt(quantity),
+          });
+  
+          const savedPurchase = await newPurchase.save();
+  
+          await ProductsSchema.findOneAndUpdate(
+            { _id: _id, quantity: { $exists: true } },
+            { $inc: { quantity: -parseInt(quantity) } },
+            { new: true }
+          );
+        }
+      }
+  
+      res.status(200).json({
+        message: "Successful product purchase!",
+        status: true,
+      });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+};

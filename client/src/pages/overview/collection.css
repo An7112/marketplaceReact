@@ -10,7 +10,8 @@
 }
 
 .paginated-title{
-    margin-top: var(--spacing-md);
+    margin-top: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
     font-size: 18px;
     font-weight: 550;
     border-bottom: 2px solid var(--text-color);

@@ -8,6 +8,7 @@ import Profile from 'pages/profile/profile';
 import CreateItem from 'pages/create/create-item';
 import StoreDetails from 'pages/store-details/storeDetails';
 import Product from 'pages/product/product';
+import { OrderHistory } from 'pages/history/history';
 
 function App() {
 return (
@@ -23,6 +24,7 @@ return (
           <Route path='/create' element={<CreateItem />} />
           <Route path='/store/:storeId' element={<StoreDetails />} />
           <Route path='/product/:storeId/:productId' element={<Product />} />
+          <Route path='/history' element={<OrderHistory />} />
         </Routes>
         <div className='footer'></div>
         {/* <Footer /> */}

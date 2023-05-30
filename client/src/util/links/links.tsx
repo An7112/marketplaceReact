@@ -1,7 +1,7 @@
 import { sidebarModal } from 'modal/index'
 import { CgShoppingBag, CgProfile } from 'react-icons/cg'
 import { HiOutlineViewGrid } from 'react-icons/hi'
-// import { FiBox } from 'react-icons/fi'
+import { MdOutlineHistoryToggleOff } from 'react-icons/md'
 
 export const linkList: Array<sidebarModal> = [
     {
@@ -18,5 +18,10 @@ export const linkList: Array<sidebarModal> = [
         link: "create",
         name: "create",
         icon: <CgShoppingBag style={{ fontSize: '18' }} />
+    },
+    {
+        link: "history",
+        name: "history",
+        icon: <MdOutlineHistoryToggleOff style={{ fontSize: '18' }} />
     },
 ]

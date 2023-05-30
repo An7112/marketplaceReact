@@ -9,9 +9,11 @@ import { FaHome } from 'react-icons/fa';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { GiSelfLove } from 'react-icons/gi'
 import { Link, useParams } from 'react-router-dom';
-import { ProductModal, StoreInfoModal } from 'modal/index';
+import { Messages, ProductModal, StoreInfoModal } from 'modal/index';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { ToastMessage } from 'component/toast-message';
+import QueryLoading from 'component/query-loading/query-loading';
 
 function Product() {
   const [loadingDetail, setLoadingDetail] = useState(false);
@@ -19,6 +21,9 @@ function Product() {
   const [storeInfo, setStoreInfo] = useState<StoreInfoModal>();
   const [productInfo, setProductInfo] = useState<ProductModal>();
   const user = useSelector((state: any) => state.auth.user)
+  const [isloading, setIsLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState<Messages>({ title: null, status: null, description: null });
 
   const fetchData = async () => {
     setLoadingDetail(true);
@@ -42,9 +47,32 @@ function Product() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storeId, productId])
 
+  const buyProduct = async () => {
+    setIsLoading(true);
+    const buyer = user.uid;
+    const products = [
+      {_id: productInfo?._id, quantity: 1}
+    ]
+    try{
+      await axios.post('http://localhost:9000/api/products/buy', {buyer, products}).then(res => setMessage({
+        title: res.data.message,
+        description: res.data.message,
+        status: res.data.status
+      }))
+      setVisible(true);
+    }catch(error){
+      console.log(error)
+    }finally{
+      setIsLoading(false)
+    }
+  }
 
   return (
     <div className='class-collection-detail' id='collection-detail'>
+       {visible === true ? <ToastMessage
+        {...message}
+      /> : ''}
+      {isloading === true && <QueryLoading />}
       <div className='content-page'>
         <div className='collection-detail-left'>
           {
@@ -145,7 +173,7 @@ function Product() {
                         <div className='offer-info'>
                           {user && user.uid === productInfo?.owner
                             ? <span className='handle-buy'>You are the owner</span>
-                            : <button className='handle-buy'>Buy now</button>
+                            : <button className='handle-buy' onClick={buyProduct}>Buy now</button>
                           }
 
                         </div>

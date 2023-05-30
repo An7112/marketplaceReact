@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Stores = require('../controller/controller')
 const Products = require('../controller/productController')
+const History = require('../controller/history')
 const multer = require('multer');
 const upload = multer();
 
@@ -15,5 +16,8 @@ router.delete('/stores/:_id', Stores.removeStore)
 router.get('/products', Products.getProducts)
 router.get('/products/:_id', Products.getProductById)
 router.post('/products', upload.none(), Products.createProduct)
+router.post('/products/buy', upload.none(), Products.buyProductById)
+
+router.get('/history', History.getHistory)
 
 module.exports = router
