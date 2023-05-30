@@ -3,12 +3,14 @@ import { AiFillExclamationCircle, AiFillRest } from 'react-icons/ai'
 import { IoMdClose } from 'react-icons/io'
 import { TbShoppingCartDiscount } from 'react-icons/tb'
 import { useDispatch, useSelector } from 'react-redux';
-import { CartModal, ProductModal } from 'modal/index'
+import { CartModal, Messages, ProductModal } from 'modal/index'
 import { setCountInCart } from 'store/reducers/state'
 import { removeFromCart } from 'util/cart/cart'
 import axios from 'axios'
 import { LoadingFrame } from 'component/loading-frame/loadingFrame'
 import './shopping.css'
+import { ToastMessage } from 'component/toast-message';
+import QueryLoading from 'component/query-loading/query-loading';
 
 export default function ShoppingCart({ propsCallback }: any) {
 
@@ -19,6 +21,10 @@ export default function ShoppingCart({ propsCallback }: any) {
     const modalRef = useRef<HTMLDivElement>(null)
     const [count, setCount] = useState<number>(countInCart);
     const [isloading, setIsloading] = useState(false);
+    const [buyLoading, setBuyLoading] = useState(false)
+    const user = useSelector((state: any) => state.auth.user)
+    const [visible, setVisible] = useState(false);
+    const [message, setMessage] = useState<Messages>({ title: null, status: null, description: null });
 
     useEffect(() => {
         const productsInCart: CartModal[] = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -34,19 +40,19 @@ export default function ShoppingCart({ propsCallback }: any) {
         propsCallback(false)
     }
 
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-                closeCart();
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutside);
+    // useEffect(() => {
+    //     function handleClickOutside(event: MouseEvent) {
+    //         if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+    //             closeCart();
+    //         }
+    //     }
+    //     document.addEventListener('mousedown', handleClickOutside);
 
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [modalRef]);
+    //     return () => {
+    //         document.removeEventListener('mousedown', handleClickOutside);
+    //     };
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [modalRef]);
 
     const totalPrice = shoppingCart.reduce((a: any, c: any) =>
         a + (c.productPrice * 1), 0
@@ -99,8 +105,32 @@ export default function ShoppingCart({ propsCallback }: any) {
         fetchProducts();
     }, [fetchProducts]);
 
+    const buyProduct = async () => {
+        setBuyLoading(true);
+        const buyer = user.uid;
+        const products = shoppingCart.map((element) => {
+            return { _id: element._id, quantity: 1 }
+        })
+        try {
+            await axios.post('http://localhost:9000/api/products/buy', { buyer, products }).then(res => setMessage({
+                title: res.data.message,
+                description: res.data.message,
+                status: res.data.status
+            }))
+            setVisible(true);
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setBuyLoading(false)
+        }
+    }
+
     return (
         <div className='cart-frame'>
+            {visible === true ? <ToastMessage
+                {...message}
+            /> : ''}
+            {buyLoading === true && <QueryLoading />}
             <aside className='cart-main' ref={modalRef}>
                 <div className='cart-outer'>
                     <div className='shopping-cart'>
@@ -129,7 +159,7 @@ export default function ShoppingCart({ propsCallback }: any) {
                         <ul className='list-item'>
                             {
                                 isloading
-                                    ? <LoadingFrame divHeight={'78.38px'} divWidth={'336px'} bgColor='#1a1c29'/>
+                                    ? <LoadingFrame divHeight={'78.38px'} divWidth={'336px'} bgColor='#1a1c29' />
                                     : shoppingCart.map((ele: ProductModal) => (
                                         <div className='shopping-cart-item'>
                                             <div className='box-img-item'>
@@ -169,7 +199,7 @@ export default function ShoppingCart({ propsCallback }: any) {
                             </div>
                         </footer>
                         <div className='class-button'>
-                            <button>
+                            <button onClick={buyProduct}>
                                 Complete purchase
                             </button>
                         </div>

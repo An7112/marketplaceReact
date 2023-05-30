@@ -45,3 +45,15 @@ export type PaginatedModal = {
     quantity: number,
     createdDate: any,
 }
+
+export type PurchaseModal = {
+    ownerProduct: string,
+    productId: string,
+    status: string,
+    productName: string,
+    productIMG: string,
+    productPrice: number,
+    buyer: string,
+    quantity: number,
+    purchaseDate: any,
+}

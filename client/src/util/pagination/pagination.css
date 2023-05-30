@@ -25,6 +25,7 @@
 .paginated-row.paginated-header {
     padding: var(--spacing-sm) 0;
     position: sticky;
+    display: grid;
     border-bottom: 1px solid var(--bg-contrast);
     top: 0;
     background-color: var(--bg-main);
@@ -44,12 +45,23 @@
     width: 100%;
     padding: 0 var(--spacing-xs);
     transition: ease-in-out 0.2s;
+    gap: var(--spacing-xs);
     display: grid;
     grid-template-columns: repeat(18, minmax(0, 1fr));
 }
 
 .paginated-item .item-paginated-key {
     grid-column: span 1 / span 1;
+    color: var(--text-color);
+}
+
+.item-paginated-key span{
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-items: center;
+    white-space: nowrap;
 }
 
 .paginated-item.paginated-header {
@@ -79,7 +91,7 @@
     font-size: 15px;
 }
 
-.item-name .item-name-store {
+.item-name-store {
     grid-column: span 5 / span 5;
     display: block;
     margin: auto;
@@ -195,6 +207,7 @@
     padding: 0;
     border: none;
     display: block;
+    border-radius: 4px;
     width: 100%;
     max-width: 100%;
     max-height: 100%;

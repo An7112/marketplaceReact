@@ -101,7 +101,7 @@ function StoreDetails() {
       item.productName.toLowerCase().includes(lowercasedTerm)
     )
     if (Object.keys(filters).length === 0) {
-      return data; // Không có filter, trả về toàn bộ mảng dữ liệu
+      return data;
     }
 
     return data.filter(item => {

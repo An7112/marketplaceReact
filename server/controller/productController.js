@@ -113,7 +113,7 @@ exports.buyProductById = async (req, res) => {
           const newPurchase = new HistorySchema({
             ownerProduct: selectedProduct.owner,
             productId: _id,
-            status: 'Being transported',
+            status: 'Success',
             productName: selectedProduct.productName,
             productIMG: selectedProduct.productIMG,
             productPrice: selectedProduct.productPrice,

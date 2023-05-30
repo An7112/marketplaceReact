@@ -23,7 +23,7 @@ const HistorySchema = mongoose.Schema({
         require: true
     },
     productPrice: {
-        type: String,
+        type: Number,
         require: true
     },
     buyer: {

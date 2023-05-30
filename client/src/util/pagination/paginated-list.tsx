@@ -28,18 +28,12 @@ const PaginatedList = (props: Props) => {
   const { searchItem } = useSelector((state: any) => state.state);
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, _] = useState(10);
-  const [checkDatalength, setCheckDatalength] = useState(false);
   const existingColumn = column ?? 1;
   const paginatedColumn = [];
   for (let i = 0; i < existingColumn; i++) {
     paginatedColumn.push(i);
   }
 
-  useEffect(() => {
-    if (paginatedData.length < 6) {
-      setCheckDatalength(true);
-    }
-  }, [paginatedData])
   const handlePageChange = (selectedPage: number) => {
     setCurrentPage(selectedPage);
   };
@@ -55,21 +49,23 @@ const PaginatedList = (props: Props) => {
     return filteredData.slice(startIndex, endIndex);
   }, [offset, itemsPerPage, searchItem, paginatedData]);
 
-  console.log(paginatedColumn)
   return (
     <>
       <div className='paginated-main'>
-        <div className='paginated-row paginated-header'>
+        <div className='paginated-row paginated-header' style={{gridTemplateColumns: paginatedColumn.length > 1 ? '' : '1fr'}}>
           {paginatedColumn.map((ele) => (
             Array.isArray(schema) && schema.length > 0
               ?
               <div className='paginated-item'
                 style={{
-                  gridTemplateColumns: `repeat(${schema.length}, minmax(0, 1fr))`
+                  gridTemplateColumns: `repeat(18, minmax(0, 1fr))`
                 }}>
                 {schema.map((element: Record<string, string>) => (
-                  <div className='item-paginated-key'>
-                    {element.header}
+                  <div className='item-paginated-key'
+                    style={{
+                      gridColumn: element.gridSpan
+                    }}>
+                    <span>{element.header}</span>
                   </div>
                 ))}
               </div>

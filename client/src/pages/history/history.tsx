@@ -1,10 +1,39 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { TbCloudDownload } from 'react-icons/tb'
+import { CustomListView } from "./component/customListView";
+import Pagination from "util/pagination/pagination";
 import './history.css'
+import { PurchaseModal } from 'modal/index';
+import PaginatedList from 'util/pagination/paginated-list';
+import axios from 'axios';
+import { historySchema } from './component/shema';
 
 export const OrderHistory = () => {
     const user = useSelector((state: any) => state.auth.user)
+    const [purchaseHistory, setPurchaseHistory] = useState<PurchaseModal[]>([])
+    const [isloading, setIsloading] = useState(false);
+
+    useEffect(() => {
+        const fetchHistory = async () => {
+           if(user){
+            setIsloading(true);
+            try{
+                const response = await axios.get(`http://localhost:9000/api/history?owner=${user.uid}`)
+                setPurchaseHistory(response.data);
+            }catch(error){
+
+            }finally{
+                setIsloading(false)
+            }
+           }
+        }
+        fetchHistory();
+    },[user])
+
+    const Item = useCallback((props: any) => {
+        return <CustomListView {...props} paginatedData={purchaseHistory}/>;
+      }, [purchaseHistory]);
 
     return (
         <div className='history-main'>
@@ -24,6 +53,13 @@ export const OrderHistory = () => {
                 </div>
             </div>
             <span className="paginated-title">View all</span>
+            <PaginatedList
+                isloading={isloading}
+                RowList={Item}
+                paginatedData={[]}
+                schema={historySchema}
+                column={1}
+            />
         </div>
     )
 }
