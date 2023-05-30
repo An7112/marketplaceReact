@@ -1,7 +1,8 @@
 import { PurchaseModal } from 'modal/index';
 import moment from 'moment';
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import './customListView.css'
+import { useSelector } from 'react-redux';
 
 type IProps = {
     paginatedData: PurchaseModal[],
@@ -9,11 +10,24 @@ type IProps = {
     currentPage: number
 }
 export const CustomListView: React.FC<IProps> = (props) => {
-    const { paginatedData } = props;
-
+    const { paginatedData, currentPage } = props;
+    const [itemsPerPage, _] = useState(10);
+    const { searchItem } = useSelector((state: any) => state.state);
+    
+    const offset = currentPage * itemsPerPage;
+    const pagedItemsDefault = useMemo(() => {
+        const startIndex = offset;
+        const endIndex = offset + itemsPerPage;
+        const lowercasedTerm = searchItem ? searchItem.toLowerCase() : '';
+        const filteredData = paginatedData?.filter((item:PurchaseModal) =>
+          item.productName && item.productName.toLowerCase().includes(lowercasedTerm)
+        ) ?? [];
+        return filteredData.slice(startIndex, endIndex);
+      }, [offset, itemsPerPage, searchItem, paginatedData]);
+      
     return (
         <>
-            {paginatedData.map((element) => (
+            {pagedItemsDefault.map((element) => (
                 <div className='custom-purchase-history'>
                     <div className='purchase-item-name'>
                         <div className='class-img'>

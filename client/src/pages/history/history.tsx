@@ -45,8 +45,8 @@ export const OrderHistory = () => {
     }, [limit, user])
 
     const Item = useCallback((props: any) => {
-        return <CustomListView {...props}/>;
-    }, []);
+        return <CustomListView {...props} paginatedData={purchaseHistory}/>;
+    }, [purchaseHistory]);
 
 
     const exportToExcel = () => {
@@ -80,7 +80,6 @@ export const OrderHistory = () => {
                 isloading={isloading}
                 RowList={Item}
                 paginatedData={convertData}
-                defaultData={purchaseHistory}
                 schema={historySchema}
                 column={1}
                 count={purchaseHistory.length}

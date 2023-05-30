@@ -17,17 +17,15 @@ interface Props {
     header: string,
     gridSpan: string,
   }[],
-  defaultData?: any[]
   RowList?: React.ComponentType<PaginatedRowListProps>
 }
 interface PaginatedRowListProps {
   currentPage: number;
-  paginatedData: PaginatedModal[];
 }
 
 const PaginatedList = (props:Props) => {
 
-  const { paginatedData, isloading, url, count, schema, column, defaultData } = props;
+  const { paginatedData, isloading, url, count, schema, column } = props;
   const RowListComponent = props.RowList;
 
   const { searchItem } = useSelector((state: any) => state.state);
@@ -54,16 +52,6 @@ const PaginatedList = (props:Props) => {
     );
     return filteredData.slice(startIndex, endIndex);
   }, [offset, itemsPerPage, searchItem, paginatedData]);
-
-  const pagedItemsDefault = useMemo(() => {
-    const startIndex = offset;
-    const endIndex = offset + itemsPerPage;
-    const lowercasedTerm = searchItem ? searchItem.toLowerCase() : '';
-    const filteredData = defaultData?.filter((item:any) =>
-      item.productName && item.productName.toLowerCase().includes(lowercasedTerm)
-    ) ?? [];
-    return filteredData.slice(startIndex, endIndex);
-  }, [offset, itemsPerPage, searchItem, defaultData]);
   
   return (
     <>
@@ -100,7 +88,7 @@ const PaginatedList = (props:Props) => {
         </div>
         {
           RowListComponent
-            ? <RowListComponent currentPage={currentPage} paginatedData={pagedItemsDefault} />
+            ? <RowListComponent currentPage={currentPage} />
             : <div className='paginated-row grid-container'>
               {
                 isloading === true
