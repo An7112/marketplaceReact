@@ -70,6 +70,7 @@ export const OrderHistory = () => {
                 paginatedData={[]}
                 schema={historySchema}
                 column={1}
+                count={purchaseHistory.length}
             />
         </div>
     )
