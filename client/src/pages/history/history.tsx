@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { TbCloudDownload } from 'react-icons/tb'
 import { CustomListView } from "./component/customListView";
-import Pagination from "util/pagination/pagination";
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 import './history.css'
 import { PurchaseModal } from 'modal/index';
 import PaginatedList from 'util/pagination/paginated-list';
@@ -16,24 +17,34 @@ export const OrderHistory = () => {
 
     useEffect(() => {
         const fetchHistory = async () => {
-           if(user){
-            setIsloading(true);
-            try{
-                const response = await axios.get(`http://localhost:9000/api/history?owner=${user.uid}`)
-                setPurchaseHistory(response.data);
-            }catch(error){
+            if (user) {
+                setIsloading(true);
+                try {
+                    const response = await axios.get(`http://localhost:9000/api/history?owner=${user.uid}`)
+                    setPurchaseHistory(response.data);
+                } catch (error) {
 
-            }finally{
-                setIsloading(false)
+                } finally {
+                    setIsloading(false)
+                }
             }
-           }
         }
         fetchHistory();
-    },[user])
+    }, [user])
 
     const Item = useCallback((props: any) => {
-        return <CustomListView {...props} paginatedData={purchaseHistory}/>;
-      }, [purchaseHistory]);
+        return <CustomListView {...props} paginatedData={purchaseHistory} />;
+    }, [purchaseHistory]);
+
+
+    const exportToExcel = () => {
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.json_to_sheet(purchaseHistory);
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        saveAs(blob, 'myHistory.xlsx');
+    };
 
     return (
         <div className='history-main'>
@@ -43,7 +54,7 @@ export const OrderHistory = () => {
                     <span className='header-dsc'>Manage your recent orders and invoices.</span>
                 </div>
                 <div className='header-top right'>
-                    <button className='header-button'>
+                    <button className='header-button' onClick={exportToExcel}>
                         <TbCloudDownload />
                         Download documents
                     </button>
