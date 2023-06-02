@@ -71,7 +71,7 @@ export default function CreateItem() {
       createData.append("productIMG", imageURL)
       createData.append("productType", productType)
       try {
-        await axios.post('http://localhost:9000/api/products', createData).then(res => setMessage({
+        await axios.post('https://marketplace-3lqw.onrender.com/api/products', createData).then(res => setMessage({
           title: res.data.message,
           description: res.data.message,
           status: res.data.status

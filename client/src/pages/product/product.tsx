@@ -36,8 +36,8 @@ function Product() {
     setLoadingDetail(true);
     if (storeId && productId) {
       try {
-        const store = await axios.get(`http://localhost:9000/api/stores/${storeId}`);
-        const product = await axios.get(`http://localhost:9000/api/products/${productId}`)
+        const store = await axios.get(`https://marketplace-3lqw.onrender.com/api/stores/${storeId}`);
+        const product = await axios.get(`https://marketplace-3lqw.onrender.com/api/products/${productId}`)
         setProductInfo(product.data);
         setStoreInfo(store.data);
       } catch (error) {
@@ -60,7 +60,7 @@ function Product() {
       { _id: productInfo?._id, quantity: 1 }
     ]
     try {
-      await axios.post('http://localhost:9000/api/products/buy', { buyer, products }).then(res => setMessage({
+      await axios.post('https://marketplace-3lqw.onrender.com/api/products/buy', { buyer, products }).then(res => setMessage({
         title: res.data.message,
         description: res.data.message,
         status: res.data.status
@@ -103,7 +103,7 @@ function Product() {
     setVisible(false);
     setIsLoading(true);
     try{
-      await axios.delete(`http://localhost:9000/api/products/${productId}`).then(res => setMessage({
+      await axios.delete(`https://marketplace-3lqw.onrender.com/api/products/${productId}`).then(res => setMessage({
         title: res.data.message,
         description: res.data.message,
         status: res.data.status

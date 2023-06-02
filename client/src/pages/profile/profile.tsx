@@ -35,7 +35,7 @@ export default function Profile() {
   useEffect(() => {
     async function getStoreInfo() {
       if (user) {
-        const store = await axios.get(`http://localhost:9000/api/stores/${user.uid}`)
+        const store = await axios.get(`https://marketplace-3lqw.onrender.com/api/stores/${user.uid}`)
         setStoreInfo(store.data);
       }
     }
@@ -48,10 +48,10 @@ export default function Profile() {
       if (user) {
         try {
           const products = await axios.get(
-            `http://localhost:9000/api/products?owner=${user.uid}&limit=${limit}`
+            `https://marketplace-3lqw.onrender.com/api/products?owner=${user.uid}&limit=${limit}`
           )
           const productsCount = await axios.get(
-            `http://localhost:9000/api/products?owner=${user.uid}&productCount`
+            `https://marketplace-3lqw.onrender.com/api/products?owner=${user.uid}&productCount`
           )
           const convertPaginatedData: PaginatedModal[] = products.data.map((item: ProductModal) => {
             return {
@@ -125,7 +125,7 @@ export default function Profile() {
         createData.append("storeAvatar", storeAvatar)
         createData.append("storeBanner", storeBanner)
         try {
-          await axios.post('http://localhost:9000/api/stores', createData).then(res => setMessage({
+          await axios.post('https://marketplace-3lqw.onrender.com/api/stores', createData).then(res => setMessage({
             title: res.data.message,
             description: res.data.message,
             status: true

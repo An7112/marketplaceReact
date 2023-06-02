@@ -45,7 +45,7 @@ function StoreDetails() {
     const getStoreProducts = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`http://localhost:9000/api/products?owner=${storeId}`)
+        const response = await axios.get(`https://marketplace-3lqw.onrender.com/api/products?owner=${storeId}`)
         setStoreProducts(response.data);
       } catch (error) {
         console.log(error);

@@ -22,7 +22,7 @@ export const OrderHistory = () => {
             if (user) {
                 setIsloading(true);
                 try {
-                    const response = await axios.get(`http://localhost:9000/api/history?owner=${user.uid}&limit=${limit}`)
+                    const response = await axios.get(`https://marketplace-3lqw.onrender.com/api/history?owner=${user.uid}&limit=${limit}`)
                     const convertPaginatedData: PaginatedModal[] = response.data.map((item: PurchaseModal) => {
                         return {
                             _id: item._id,

@@ -14,7 +14,7 @@ function Collection() {
         async function getStoreInfo() {
             setIsLoading(true);
             try {
-                const store = await axios.get(`http://localhost:9000/api/stores?limit=${limit}`)
+                const store = await axios.get(`https://marketplace-3lqw.onrender.com/api/stores?limit=${limit}`)
                 const convertPaginatedData:PaginatedModal[] = store.data.map((item: StoreInfoModal) => {
                     return {
                         _id: item._id,

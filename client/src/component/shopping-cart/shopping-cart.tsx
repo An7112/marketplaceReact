@@ -74,7 +74,7 @@ export default function ShoppingCart({ propsCallback }: any) {
         setIsloading(true)
         try {
             const promises = cartItems.map(async (ele: CartModal) => {
-                const response = await axios.get(`http://localhost:9000/api/products/${ele.id}`);
+                const response = await axios.get(`https://marketplace-3lqw.onrender.com/api/products/${ele.id}`);
                 const product = response.data;
                 return {
                     _id: product._id,
@@ -113,7 +113,7 @@ export default function ShoppingCart({ propsCallback }: any) {
                 return { _id: element._id, quantity: 1 }
             })
             try {
-                await axios.post('http://localhost:9000/api/products/buy', { buyer, products }).then(res => setMessage({
+                await axios.post('https://marketplace-3lqw.onrender.com/api/products/buy', { buyer, products }).then(res => setMessage({
                     title: res.data.message,
                     description: res.data.message,
                     status: res.data.status

@@ -74,7 +74,7 @@ export const UpdateModal: React.FC<IProps> = ({data, propsCallback}) => {
       createData.append("productIMG", imageURL)
       createData.append("productType", productType)
       try {
-        await axios.put(`http://localhost:9000/api/products/${productId}`, createData).then(res => setMessage({
+        await axios.put(`https://marketplace-3lqw.onrender.com/api/products/${productId}`, createData).then(res => setMessage({
           title: res.data.message,
           description: res.data.message,
           status: res.data.status
