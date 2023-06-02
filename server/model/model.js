@@ -26,6 +26,10 @@ const StoresSchema = mongoose.Schema({
         type: Number,
         require: true
     },
+    purchased: {
+        type: Number,
+        require: true
+    },
     date: {
         type: Date,
         default: Date.now

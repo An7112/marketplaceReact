@@ -20,7 +20,7 @@ export default function Header() {
     const [openCart, setOpenCart] = useState(false);
     const modalRef = useRef<HTMLDivElement>(null)
     const [cartCount, setCartCount] = useState(0);
-    const user = useSelector((state: any) => state.auth.user);
+    const user = useSelector((state: any) => state.auth.user) ?? '';
 
     useEffect(() => {
         const productsInCart: CartModal[] = JSON.parse(localStorage.getItem('cart') || '[]');

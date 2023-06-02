@@ -1,29 +1,36 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import './product.css'
 import { LoadingFrame } from 'component/loading-frame/loadingFrame';
 import { Offer, Properties } from './component/dropdown';
-import { AiFillCaretDown } from 'react-icons/ai';
+import { AiFillCaretDown, AiFillEdit } from 'react-icons/ai';
+import { CgPlayListRemove } from 'react-icons/cg'
 import { IoLogoUsd } from 'react-icons/io'
-import { BsPatchCheckFill, BsShare } from 'react-icons/bs';
+import { BsPatchCheckFill } from 'react-icons/bs';
 import { FaHome } from 'react-icons/fa';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
-import { GiSelfLove } from 'react-icons/gi'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Messages, ProductModal, StoreInfoModal } from 'modal/index';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { ToastMessage } from 'component/toast-message';
 import QueryLoading from 'component/query-loading/query-loading';
+import { Modal } from 'antd';
+import { UpdateModal } from './component/modal/update-modal';
 
 function Product() {
   const [loadingDetail, setLoadingDetail] = useState(false);
   const { storeId, productId } = useParams();
   const [storeInfo, setStoreInfo] = useState<StoreInfoModal>();
   const [productInfo, setProductInfo] = useState<ProductModal>();
-  const user = useSelector((state: any) => state.auth.user)
+  const user = useSelector((state: any) => state.auth.user) ?? ''
   const [isloading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState<Messages>({ title: null, status: null, description: null });
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [refetch, setRefetch] = useState(0)
+  const [isModalOpenRemove, setIsModalOpenRemove] = useState(false);
+  const history = useNavigate();
 
   const fetchData = async () => {
     setLoadingDetail(true);
@@ -41,35 +48,82 @@ function Product() {
     }
   }
 
-
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storeId, productId])
+  }, [storeId, productId, refetch])
 
   const buyProduct = async () => {
     setIsLoading(true);
     const buyer = user.uid;
     const products = [
-      {_id: productInfo?._id, quantity: 1}
+      { _id: productInfo?._id, quantity: 1 }
     ]
+    try {
+      await axios.post('http://localhost:9000/api/products/buy', { buyer, products }).then(res => setMessage({
+        title: res.data.message,
+        description: res.data.message,
+        status: res.data.status
+      }))
+      setVisible(true);
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  const callbackOpenCart = (callbackData: any) => {
+    setRefetch(callbackData.refetch)
+    setOpen(callbackData.closeModal)
+  }
+
+  const Item = useCallback(() => {
+    if (productInfo) {
+      return <UpdateModal propsCallback={callbackOpenCart} data={productInfo} />;
+    }
+    return null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open === true]);
+
+
+  const showModalRemove = () => {
+    setIsModalOpenRemove(true);
+  };
+
+  const handleOkRemove = async () => {
+    setVisible(false);
+    setIsLoading(true);
     try{
-      await axios.post('http://localhost:9000/api/products/buy', {buyer, products}).then(res => setMessage({
+      await axios.delete(`http://localhost:9000/api/products/${productId}`).then(res => setMessage({
         title: res.data.message,
         description: res.data.message,
         status: res.data.status
       }))
       setVisible(true);
     }catch(error){
-      console.log(error)
+      console.log(error);
     }finally{
-      setIsLoading(false)
+      setIsLoading(false);
+      setIsModalOpenRemove(false);
+      history('/')
     }
-  }
+  };
 
+  const handleCancelRemove = () => {
+    setIsModalOpenRemove(false);
+  };
   return (
     <div className='class-collection-detail' id='collection-detail'>
-       {visible === true ? <ToastMessage
+      {visible === true ? <ToastMessage
         {...message}
       /> : ''}
       {isloading === true && <QueryLoading />}
@@ -116,8 +170,14 @@ function Product() {
                 </div>
               </div>
               <div className='chakra-stack-header-right'>
-                <span><GiSelfLove /></span>
-                <span><BsShare /></span>
+                {user && user.uid === productInfo?.owner
+                  ? <span><AiFillEdit onClick={showModal} /></span>
+                  : null
+                }
+                {user && user.uid === productInfo?.owner
+                  ? <span><CgPlayListRemove onClick={showModalRemove}/></span>
+                  : null
+                }
                 <Link to={'/collection'}>
                   <span><FaHome /></span>
                 </Link>
@@ -195,6 +255,20 @@ function Product() {
           </div>
         </div>
       </div>
+      <Modal
+        title="Update product"
+        open={open}
+        // onOk={handleOk}
+        footer={''}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        className='update-modal'
+      >
+        {<Item /> ?? null}
+      </Modal>
+      <Modal title="Remove product" open={isModalOpenRemove} onOk={handleOkRemove} onCancel={handleCancelRemove}>
+        <p>Are you sure you want to delete {productInfo?.productName}</p>
+      </Modal>
     </div>
   )
 }

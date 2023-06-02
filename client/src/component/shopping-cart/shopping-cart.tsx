@@ -22,7 +22,7 @@ export default function ShoppingCart({ propsCallback }: any) {
     const [count, setCount] = useState<number>(countInCart);
     const [isloading, setIsloading] = useState(false);
     const [buyLoading, setBuyLoading] = useState(false)
-    const user = useSelector((state: any) => state.auth.user)
+    const user = useSelector((state: any) => state.auth.user) ?? ''
     const [visible, setVisible] = useState(false);
     const [message, setMessage] = useState<Messages>({ title: null, status: null, description: null });
 
@@ -189,7 +189,8 @@ export default function ShoppingCart({ propsCallback }: any) {
                                                 <AiFillRest onClick={() => handleRemoveFromCart(ele._id, ele.owner)} />
                                             </div>
                                         </div>
-                                    ))
+                                    )
+                                )
                             }
                         </ul>
                         <div style={{ marginBottom: '16px' }}></div>

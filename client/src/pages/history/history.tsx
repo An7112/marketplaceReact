@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { FormEvent, useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { TbCloudDownload } from 'react-icons/tb'
 import { CustomListView } from "./component/customListView";
@@ -11,7 +11,7 @@ import axios from 'axios';
 import { historySchema } from './component/shema';
 
 export const OrderHistory = () => {
-    const user = useSelector((state: any) => state.auth.user)
+    const user = useSelector((state: any) => state.auth.user) ?? ''
     const { limit } = useSelector((state: any) => state.state)
     const [purchaseHistory, setPurchaseHistory] = useState<PurchaseModal[]>([])
     const [isloading, setIsloading] = useState(false);
@@ -25,14 +25,14 @@ export const OrderHistory = () => {
                     const response = await axios.get(`http://localhost:9000/api/history?owner=${user.uid}&limit=${limit}`)
                     const convertPaginatedData: PaginatedModal[] = response.data.map((item: PurchaseModal) => {
                         return {
-                          _id: item._id,
-                          img: item.productIMG,
-                          name: item.productName,
-                          quantity: item.quantity,
-                          createdDate: item.purchaseDate,
+                            _id: item._id,
+                            img: item.productIMG,
+                            name: item.productName,
+                            quantity: item.quantity,
+                            createdDate: item.purchaseDate,
                         }
-                      })
-                      setConvertData(convertPaginatedData)
+                    })
+                    setConvertData(convertPaginatedData)
                     setPurchaseHistory(response.data);
                 } catch (error) {
 
@@ -45,7 +45,7 @@ export const OrderHistory = () => {
     }, [limit, user])
 
     const Item = useCallback((props: any) => {
-        return <CustomListView {...props} paginatedData={purchaseHistory}/>;
+        return <CustomListView {...props} paginatedData={purchaseHistory} />;
     }, [purchaseHistory]);
 
 

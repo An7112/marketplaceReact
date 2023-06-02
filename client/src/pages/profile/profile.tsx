@@ -29,7 +29,7 @@ export default function Profile() {
   const [isLoadingQuery, setIsLoadingQuery] = useState(false);
   const [paginatedCount, setPaginatedCount] = useState(0);
 
-  const user = useSelector((state: any) => state.auth.user);
+  const user = useSelector((state: any) => state.auth.user) ?? '';
   const { limit } = useSelector((state: any) => state.state);
 
   useEffect(() => {
@@ -203,7 +203,7 @@ export default function Profile() {
                     <p className='text-base'>Products</p>
                   </div>
                   <div className='dsc-item'>
-                    <h4>1</h4>
+                    <h4>{storeInfo?.purchased ?? 0}</h4>
                     <p className='text-base'>Purchased</p>
                   </div>
                   <div className='dsc-item'>

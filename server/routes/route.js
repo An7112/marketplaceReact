@@ -17,6 +17,8 @@ router.get('/products', Products.getProducts)
 router.get('/products/:_id', Products.getProductById)
 router.post('/products', upload.none(), Products.createProduct)
 router.post('/products/buy', upload.none(), Products.buyProductById)
+router.put('/products/:productId', upload.none(), Products.updateProduct)
+router.delete('/products/:productId', Products.removeProduct)
 
 router.get('/history', History.getHistory)
 

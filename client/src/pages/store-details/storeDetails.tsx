@@ -21,7 +21,7 @@ interface Filters {
 function StoreDetails() {
   const dispatch = useDispatch();
   const { countInCart, searchItem } = useSelector((state: any) => state.state);
-  const user = useSelector((state: any) => state.auth.user);
+  const user = useSelector((state: any) => state.auth.user) ?? '';
   const { storeId } = useParams();
   const [storeProducts, setStoreProducts] = useState<ProductModal[]>([]);
   const [isloading, setIsLoading] = useState(false);

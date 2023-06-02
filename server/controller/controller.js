@@ -36,6 +36,7 @@ exports.createStore = async (req, res) => {
             storeDescription: req.body.storeDescription,
             storeAvatar: req.body.storeAvatar,
             storeBanner: req.body.storeBanner,
+            purchased: 0,
             storeProductLength: 0,
         })
         try {
@@ -82,7 +83,6 @@ exports.removeStore = (req, res) => {
 
 exports.updateStore = async (req, res) => {
     const updateStore = {
-        _id: req.body.storeId,
         storeName: req.body.storeName,
         storeDescription: req.body.storeDescription,
         storeAvatar: req.body.storeAvatar,

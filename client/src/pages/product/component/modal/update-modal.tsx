@@ -6,28 +6,33 @@ import { VscGitPullRequestCreate } from 'react-icons/vsc'
 import { AiOutlineClear, AiOutlineLoading, AiOutlineDatabase } from 'react-icons/ai'
 import { client } from "util/infura-ipfs/ipfs";
 import { ToastMessage } from 'component/toast-message'
-import { Messages } from 'modal/index'
-import './create.css'
+import { Messages, ProductModal } from 'modal/index'
+import './update-modal.css'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import QueryLoading from 'component/query-loading/query-loading'
 import { Select } from 'antd'
+import { useParams } from 'react-router-dom'
 
-export default function CreateItem() {
-  const [imageURL, setImageURL] = useState('')
+type IProps = {
+  data: ProductModal
+  propsCallback: any
+}
+export const UpdateModal: React.FC<IProps> = ({data, propsCallback}) => {
+  const [imageURL, setImageURL] = useState(data.productIMG)
   const [loading, setLoading] = useState(false)
   const [formInput, updateFormInput] = useState<any>({
-    productName: '',
-    productPrice: '',
-    productDescription: '',
-    quantity: 0,
-    productType: 'shirts',
+    productName: data.productName,
+    productPrice: data.productPrice,
+    productDescription: data.productDescription,
+    quantity: data.quantity,
+    productType: data.productType,
   })
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState<Messages>({ title: null, status: null, description: null });
   const user = useSelector((state: any) => state.auth.user) ?? '';
   const [isloading, setIsLoading] = useState(false);
-
+  const {productId} = useParams();
   const inputRef = useRef<any>(null);
 
   function clearContent() {
@@ -56,14 +61,12 @@ export default function CreateItem() {
     }
   }
 
-
   async function handleSubmit() {
     setVisible(false);
     setIsLoading(true);
     if (user) {
       const { productName, productPrice, productDescription, quantity, productType } = formInput;
       const createData = new FormData()
-      createData.append("owner", user.uid)
       createData.append("productName", productName)
       createData.append("productPrice", productPrice)
       createData.append("productDescription", productDescription)
@@ -71,7 +74,7 @@ export default function CreateItem() {
       createData.append("productIMG", imageURL)
       createData.append("productType", productType)
       try {
-        await axios.post('http://localhost:9000/api/products', createData).then(res => setMessage({
+        await axios.put(`http://localhost:9000/api/products/${productId}`, createData).then(res => setMessage({
           title: res.data.message,
           description: res.data.message,
           status: res.data.status
@@ -81,6 +84,10 @@ export default function CreateItem() {
         console.log(error);
       } finally {
         setIsLoading(false);
+        propsCallback({
+          refetch: 1,
+          closeModal: false,
+        })
       }
     }
   }
@@ -92,27 +99,14 @@ export default function CreateItem() {
   }, [])
 
   return (
-    <div className='create-main'>
+    <div className='update-main'>
       {visible === true ? <ToastMessage
         {...message}
       /> : ''}
       {isloading === true && <QueryLoading />}
-      <div className='create-nft-body'>
+      <div className='update-nft-body'>
         <div className='div-form'>
-          <div className='grid-form'>
-            <div className='information-form'>
-              <div className='title-page'>
-                <p>Create item</p>
-                <VscGitPullRequestCreate />
-              </div>
-              <div className='infomation-form-content'>
-                <h3>Information</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Repellat optio debitis beatae mollitia qui dolorem deleniti nam et,
-                  tenetur quisquam? Tenetur eius, provident amet quam corrupti nemo ab voluptates quasi!
-                </p>
-              </div>
-            </div>
+          <div className='grid-form-update'>
             <div className='box-form'>
               <div className='form'>
                 <div className='content-form'>
@@ -120,25 +114,25 @@ export default function CreateItem() {
                     <div className='content-form-top-grid'>
                       <div className='div-label-input'>
                         <label htmlFor="Name">NAME <BiRename className='icons' /></label>
-                        <input className='input' id='Name' type="text" placeholder="Name" pattern='.{1,}' required
+                        <input value={formInput.productName} className='input' id='Name' type="text" placeholder="Name" pattern='.{1,}' required
                           onChange={e => updateFormInput({ ...formInput, productName: e.target.value })}
                         />
                       </div>
                       <div className='div-label-input'>
                         <label htmlFor="Price">PRICE <IoPricetagsOutline className='icons' /></label>
-                        <input className='input' id='Price' type="Number" placeholder="Price" pattern='.{1,}' required
+                        <input value={formInput.productPrice} className='input' id='Price' type="Number" placeholder="Price" pattern='.{1,}' required
                           onChange={e => updateFormInput({ ...formInput, productPrice: e.target.value })}
                         />
                       </div>
                       <div className='div-label-input full'>
                         <label htmlFor="Description">Description <TbFileDescription className='icons' /></label>
-                        <textarea id='Description' rows={2} placeholder='Asset Description...'
+                        <textarea value={formInput.productDescription} id='Description' rows={2} placeholder='Asset Description...'
                           onChange={e => updateFormInput({ ...formInput, productDescription: e.target.value })}
                         />
                       </div>
                       <div className='div-label-input grid2'>
                         <label htmlFor="Price">QUANTITY <AiOutlineDatabase className='icons' /></label>
-                        <input className='input' id='Quantity' type="Number" placeholder="Quantity" pattern='.{1,}' required
+                        <input value={formInput.quantity} className='input' id='Quantity' type="Number" placeholder="Quantity" pattern='.{1,}' required
                           onChange={e => updateFormInput({ ...formInput, quantity: e.target.value })}
                         />
                       </div>
@@ -148,7 +142,7 @@ export default function CreateItem() {
                           labelInValue
                           className='select'
                           id='product-type'
-                          defaultValue={{ value: 'shirts', label: 'Shirts' }}
+                          defaultValue={{ value: formInput.productType, label: formInput.productType.charAt(0).toUpperCase() + formInput.productType.slice(1) }}
                           onChange={(value) =>  updateFormInput({ ...formInput, productType: value.value })}
                           options={[
                             { value: 'shirts', label: 'Shirts' },
@@ -197,7 +191,7 @@ export default function CreateItem() {
                         && formInput.description !== ''
                         && imageURL !== ''
                         && user
-                        ? <button className='button-not-empty' type='submit' onClick={handleSubmit}>Create item</button>
+                        ? <button className='button-not-empty' type='submit' onClick={handleSubmit}>Update item</button>
                         : <button type='button' className='button-empty' style={{ cursor: 'default' }}>Data cannot be empty</button>}
                     </div>
                   </div>

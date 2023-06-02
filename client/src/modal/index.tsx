@@ -11,6 +11,7 @@ export type StoreInfoModal = {
     storeAvatar?: string,
     storeBanner?: string,
     storeProductLength?: number,
+    purchased: number,
     date?: any
 }
 
