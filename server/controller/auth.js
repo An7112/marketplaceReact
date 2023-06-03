@@ -13,25 +13,25 @@ const generateRefreshToken = (username) => {
 
 let refreshTokens = [];
 
-// Đăng ký
-app.post('/register', async (req, res) => {
+// Đăng ký /register
+exports.register = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, displayName } = req.body;
         const existingUser = await User.findOne({ username });
         if (existingUser) {
             return res.status(409).json({ error: 'Tài khoản đã tồn tại' });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ username, password: hashedPassword });
+        const user = new User({displayName, username, password: hashedPassword });
         await user.save();
         res.status(201).json({ message: 'Đăng ký thành công' });
     } catch (error) {
         res.status(500).json({ error: 'Đăng ký thất bại' });
     }
-});
+};
 
-// Đăng nhập
-app.post('/login', async (req, res) => {
+// Đăng nhập login
+exports.login = async (req, res) => {
     try {
         const { username, password } = req.body;
         const user = await User.findOne({ username });
@@ -49,7 +49,7 @@ app.post('/login', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Đăng nhập thất bại' });
     }
-});
+};
 
 // Xác thực token
 const authenticateToken = (req, res, next) => {
@@ -67,8 +67,8 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// Refresh token
-app.post('/token', (req, res) => {
+// Refresh token token
+exports.refresh = (req, res) => {
     const refreshToken = req.body.refreshToken;
     if (!refreshToken) {
         return res.status(401).json({ error: 'Token refresh không tồn tại' });
@@ -83,14 +83,14 @@ app.post('/token', (req, res) => {
         const accessToken = generateAccessToken(user.username);
         res.json({ accessToken });
     });
-});
+};
 
-// Đăng xuất
-app.post('/logout', (req, res) => {
+// Đăng xuất logout
+exports.logout = (req, res) => {
     const refreshToken = req.body.refreshToken;
     if (!refreshToken) {
         return res.status(401).json({ error: 'Token refresh không tồn tại' });
     }
     refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
     res.json({ message: 'Đăng xuất thành công' });
-});
+};

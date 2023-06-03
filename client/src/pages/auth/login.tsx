@@ -39,14 +39,16 @@ const Login: React.FC = () => {
         <div className='div-label-input'>
           <label htmlFor="Email">Email address <MdEmail className='icons' /></label>
           <input className='input' id='Email' type="email" placeholder="Email..." pattern='.{1,}' required
+            onChange={(event) => setUsername(event.target.value)}
           />
         </div>
         <div className='div-label-input'>
           <label htmlFor="Password">Password <MdPassword className='icons' /></label>
           <input className='input' id='Email' type="password" placeholder="Password..." pattern='.{1,}' required
+            onChange={(event) => setPassword(event.target.value)}
           />
         </div>
-        <button className='login-button'>
+        <button className='login-button' onClick={handleLogin}>
           Login
         </button>
         <h5 className='text-blur'>OR</h5>

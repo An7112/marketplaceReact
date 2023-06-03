@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000'; // Thay đổi URL của API server nếu cần
+const API_URL = 'http://localhost:9000/api';
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
@@ -10,7 +10,6 @@ export const login = async (username: string, password: string) => {
   try {
     const response = await axiosInstance.post('/login', { username, password });
     const { accessToken, refreshToken } = response.data;
-    // Lưu trữ access token và refresh token vào localStorage hoặc sessionStorage
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     return response.data;
@@ -18,6 +17,16 @@ export const login = async (username: string, password: string) => {
     throw new Error('Đăng nhập không thành công');
   }
 };
+
+export const signup = async (displayName: string, username: string, password: string) => {
+  try {
+    const response = await axiosInstance.post('/register', { username, password, displayName });
+    return response.data;
+  } catch (error) {
+    throw new Error('Đăng ký không thành công');
+  }
+};
+
 
 export const refreshAccessToken = async () => {
   const refreshToken = localStorage.getItem('refreshToken');
@@ -27,7 +36,6 @@ export const refreshAccessToken = async () => {
   try {
     const response = await axiosInstance.post('/token', { refreshToken });
     const { accessToken } = response.data;
-    // Lưu trữ access token mới vào localStorage hoặc sessionStorage
     localStorage.setItem('accessToken', accessToken);
     return accessToken;
   } catch (error) {

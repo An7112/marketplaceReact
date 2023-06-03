@@ -10,10 +10,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { loginWithGoogle, logoutUser, restoreUser } from 'store/actions/auth'
 import ShoppingCart from 'component/shopping-cart/shopping-cart'
 import { CartModal } from 'modal/index'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { setSearchValue } from 'store/reducers/state'
+import { refreshAccessToken } from 'pages/auth'
 
 export default function Header() {
+    const history = useNavigate();
     const dispatch = useDispatch();
     const { countInCart } = useSelector((state: any) => state.state);
     const [userInfoVisible, setUserInfoVisible] = useState(false);
@@ -66,6 +68,20 @@ export default function Header() {
         const existingValue = event.target.value;
         dispatch(setSearchValue(existingValue))
     }
+
+    useEffect(() => {
+      const checkAuth = async () => {
+        try {
+          await refreshAccessToken();
+        } catch (error) {
+          console.error(error);
+          history('/login');
+        }
+      };
+  
+      checkAuth();
+    }, []);
+    
     return (
         <>
             <div className='header'>
