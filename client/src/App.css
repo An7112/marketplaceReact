@@ -5,11 +5,16 @@
 }
 .main {
   display: flex;
+  background-color: var(--bg-main);
   flex-direction: column;
-  width: calc(100% - 280px);
-  height: 100%;
+  width: 100%;
+  min-height: 100vh;
   overflow: hidden;
   position: relative;
+}
+
+.main.open {
+  width: calc(100% - 280px);
 }
 
 @media only screen and (max-width: 768px) {
