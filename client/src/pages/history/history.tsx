@@ -9,6 +9,8 @@ import { PaginatedModal, PurchaseModal } from 'modal/index';
 import PaginatedList from 'util/pagination/paginated-list';
 import axios from 'axios';
 import { historySchema } from './component/shema';
+import Sidebar from 'component/sidebar/sidebar';
+import Header from 'component/header/header';
 
 export const OrderHistory = () => {
     const user = useSelector((state: any) => state.auth.user) ?? ''
@@ -59,31 +61,37 @@ export const OrderHistory = () => {
     };
 
     return (
-        <div className='history-main'>
-            <div className='history-header'>
-                <div className='header-top left'>
-                    <h3 className='header-title'>Order history</h3>
-                    <span className='header-dsc'>Manage your recent orders and invoices.</span>
-                </div>
-                <div className='header-top right'>
-                    <button className='header-button' onClick={exportToExcel}>
-                        <TbCloudDownload />
-                        Download documents
-                    </button>
-                    <button className='header-button order'>
-                        New Order
-                    </button>
+        <div className="container">
+            <Sidebar />
+            <div className="main" >
+                <Header />
+                <div className='history-main'>
+                    <div className='history-header'>
+                        <div className='header-top left'>
+                            <h3 className='header-title'>Order history</h3>
+                            <span className='header-dsc'>Manage your recent orders and invoices.</span>
+                        </div>
+                        <div className='header-top right'>
+                            <button className='header-button' onClick={exportToExcel}>
+                                <TbCloudDownload />
+                                Download documents
+                            </button>
+                            <button className='header-button order'>
+                                New Order
+                            </button>
+                        </div>
+                    </div>
+                    <span className="paginated-title">View all</span>
+                    <PaginatedList
+                        isloading={isloading}
+                        RowList={Item}
+                        paginatedData={convertData}
+                        schema={historySchema}
+                        column={1}
+                        count={purchaseHistory.length}
+                    />
                 </div>
             </div>
-            <span className="paginated-title">View all</span>
-            <PaginatedList
-                isloading={isloading}
-                RowList={Item}
-                paginatedData={convertData}
-                schema={historySchema}
-                column={1}
-                count={purchaseHistory.length}
-            />
         </div>
     )
 }

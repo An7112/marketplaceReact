@@ -670,6 +670,25 @@ hr {
     border-bottom-width: 1px;
 }
 
+.remove-modal .ant-modal-content{
+    background-color: var(--bg-contrast);
+}
+
+.remove-modal .ant-modal-content .ant-modal-close{
+    color: var(--text-color);
+}
+.remove-modal .ant-modal-content .ant-modal-header{
+    background-color: var(--bg-contrast);
+}
+
+.remove-modal .ant-modal-content .ant-modal-header .ant-modal-title{
+    color: var(--text-color);
+}
+
+.remove-modal .ant-modal-content .ant-modal-body p{
+    color: var(--text-color);
+}
+
 @media (max-width: 768px) {
     .class-collection-detail .content-page {
         flex-direction: column;

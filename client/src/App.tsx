@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import Sidebar from 'component/sidebar/sidebar';
-import Header from 'component/header/header';
 import './App.css';
 import Collection from 'pages/overview/collection';
 import Profile from 'pages/profile/profile';
@@ -11,20 +9,14 @@ import Product from 'pages/product/product';
 import { OrderHistory } from 'pages/history/history';
 import Login from 'pages/auth/login';
 import Signup from 'pages/auth/signup';
-
 function App() {
 
-  const auth = localStorage.getItem('accessToken');
   return (
     <BrowserRouter>
-      <div className="container">
-        {auth && <Sidebar />}
-        <div className={!auth ? "main" : "main open"} >
-          {auth && <Header />}
           <Routes>
-            <Route path='/' element={<Navigate to={auth ? '/collection' : '/login'} />} />
+            <Route path='/' element={<Navigate to='/collection' />} />
             <Route path='/signup' element={<Signup />} />
-            <Route path='/login' element={<Login />} />
+            <Route path={'/login'} element={<Login />} />
             <Route path='/collection' element={<Collection />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/create' element={<CreateItem />} />
@@ -33,9 +25,6 @@ function App() {
             <Route path='/history' element={<OrderHistory />} />
           </Routes>
           <div className='footer'></div>
-          {/* <Footer /> */}
-        </div>
-      </div>
     </BrowserRouter>
   );
 }

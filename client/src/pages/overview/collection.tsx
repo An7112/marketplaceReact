@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import PaginatedList from 'util/pagination/paginated-list';
 import { PaginatedModal, StoreInfoModal } from 'modal/index';
 import axios from 'axios';
+import Sidebar from 'component/sidebar/sidebar';
+import Header from 'component/header/header';
 
 function Collection() {
     const { user } = useSelector((state: any) => state.auth);
@@ -15,7 +17,7 @@ function Collection() {
             setIsLoading(true);
             try {
                 const store = await axios.get(`https://marketplace-3lqw.onrender.com/api/stores?limit=${limit}`)
-                const convertPaginatedData:PaginatedModal[] = store.data.map((item: StoreInfoModal) => {
+                const convertPaginatedData: PaginatedModal[] = store.data.map((item: StoreInfoModal) => {
                     return {
                         _id: item._id,
                         img: item.storeAvatar,
@@ -24,8 +26,9 @@ function Collection() {
                         createdDate: item.date,
                     }
                 })
+                console.log(store);
                 setStoreInfo(convertPaginatedData);
-            }catch(error){
+            } catch (error) {
                 console.log(error)
             } finally {
                 setIsLoading(false);
@@ -35,15 +38,21 @@ function Collection() {
     }, [limit])
 
     return (
-        <div className='overview-main'>
-            {user && <h3>Welcome back, {user.displayName}</h3>}
-            <span className='paginated-title'>All stores</span>
-            <PaginatedList 
-            url='store' 
-            isloading={isloading} 
-            paginatedData={storeInfo} 
-            column={2}
-            />
+        <div className="container">
+            <Sidebar />
+            <div className="main" >
+                <Header />
+                <div className='overview-main'>
+                    {user && <h3>Welcome back, {user.displayName}</h3>}
+                    <span className='paginated-title'>All stores</span>
+                    <PaginatedList
+                        url='store'
+                        isloading={isloading}
+                        paginatedData={storeInfo}
+                        column={2}
+                    />
+                </div>
+            </div>
         </div>
     )
 }

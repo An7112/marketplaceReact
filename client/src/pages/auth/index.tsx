@@ -9,9 +9,10 @@ const axiosInstance = axios.create({
 export const login = async (username: string, password: string) => {
   try {
     const response = await axiosInstance.post('/login', { username, password });
-    const { accessToken, refreshToken } = response.data;
+    const { accessToken, refreshToken, userId } = response.data;
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem('userId', userId);
     return response.data;
   } catch (error) {
     throw new Error('Đăng nhập không thành công');
@@ -31,7 +32,7 @@ export const signup = async (displayName: string, username: string, password: st
 export const refreshAccessToken = async () => {
   const refreshToken = localStorage.getItem('refreshToken');
   if (!refreshToken) {
-    throw new Error('Token refresh không tồn tại');
+    console.error('Lỗi khi làm mới token')
   }
   try {
     const response = await axiosInstance.post('/token', { refreshToken });
@@ -39,6 +40,6 @@ export const refreshAccessToken = async () => {
     localStorage.setItem('accessToken', accessToken);
     return accessToken;
   } catch (error) {
-    throw new Error('Lấy access token mới không thành công');
+    console.error('Lỗi khi làm mới token')
   }
 };

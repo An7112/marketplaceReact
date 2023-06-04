@@ -3,8 +3,8 @@ const User = require('../model/auth')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const generateAccessToken = (username) => {
-    return jwt.sign({ username }, 'access_token_secret', { expiresIn: '15m' });
+const generateAccessToken = (username, userId) => {
+    return jwt.sign({ username, userId }, 'access_token_secret', { expiresIn: '15m' });
 };
 
 const generateRefreshToken = (username) => {
@@ -30,7 +30,6 @@ exports.register = async (req, res) => {
     }
 };
 
-// Đăng nhập login
 exports.login = async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -42,16 +41,15 @@ exports.login = async (req, res) => {
         if (!isPasswordValid) {
             return res.status(401).json({ error: 'Sai mật khẩu' });
         }
-        const accessToken = generateAccessToken(username);
+        const accessToken = generateAccessToken(username, user._id); // Thêm user._id vào mã thông báo truy cập
         const refreshToken = generateRefreshToken(username);
         refreshTokens.push(refreshToken);
-        res.json({ accessToken, refreshToken });
+        res.json({ accessToken, refreshToken, userId: user._id }); // Trả về userId
     } catch (error) {
         res.status(500).json({ error: 'Đăng nhập thất bại' });
     }
 };
 
-// Xác thực token
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -67,7 +65,6 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// Refresh token token
 exports.refresh = (req, res) => {
     const refreshToken = req.body.refreshToken;
     if (!refreshToken) {
@@ -85,7 +82,6 @@ exports.refresh = (req, res) => {
     });
 };
 
-// Đăng xuất logout
 exports.logout = (req, res) => {
     const refreshToken = req.body.refreshToken;
     if (!refreshToken) {
