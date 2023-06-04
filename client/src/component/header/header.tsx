@@ -6,13 +6,11 @@ import { AiOutlineCaretDown } from 'react-icons/ai'
 import { IoSettingsOutline, IoLogOutOutline } from 'react-icons/io5'
 import './header.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { restoreUser } from 'store/actions/auth'
 import ShoppingCart from 'component/shopping-cart/shopping-cart'
 import { CartModal } from 'modal/index'
 import { Link, useNavigate } from 'react-router-dom'
 import { setSearchValue } from 'store/reducers/state'
 import { refreshAccessToken } from 'pages/auth'
-import { authStatus } from 'store/reducers/authNode'
 
 export default function Header() {
     const history = useNavigate();
@@ -22,7 +20,7 @@ export default function Header() {
     const [openCart, setOpenCart] = useState(false);
     const modalRef = useRef<HTMLDivElement>(null)
     const [cartCount, setCartCount] = useState(0);
-    const [redirectToLogin, setRedirectToLogin] = useState(false); // Thêm biến redirectToLogin
+    const [redirectToLogin, setRedirectToLogin] = useState(false);
 
     useEffect(() => {
         const productsInCart: CartModal[] = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -30,7 +28,6 @@ export default function Header() {
     }, [countInCart])
 
     const handleLogout = () => {
-        // Xóa access token khỏi lưu trữ (localStorage hoặc session storage)
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('accessToken');
         localStorage.removeItem('userId');
@@ -80,7 +77,7 @@ export default function Header() {
         const accessToken = localStorage.getItem('accessToken');
         const isLoggedIn = accessToken;
         if (isLoggedIn == null) {
-            setRedirectToLogin(true); // Đánh dấu để chuyển hướng đến trang đăng nhập
+            setRedirectToLogin(true);
         }
     }, []);
 

@@ -18,7 +18,6 @@ const Signup: React.FC = () => {
             window.location.href = '/login';
         } catch (error) {
             console.error(error);
-            // Xử lý lỗi đăng nhập
         }
     };
 

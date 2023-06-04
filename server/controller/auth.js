@@ -13,7 +13,6 @@ const generateRefreshToken = (username) => {
 
 let refreshTokens = [];
 
-// Đăng ký /register
 exports.register = async (req, res) => {
     try {
         const { username, password, displayName } = req.body;

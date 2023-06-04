@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:9000/api';
+const API_URL = 'https://marketplace-3lqw.onrender.com/api';
 
 const axiosInstance = axios.create({
   baseURL: API_URL,

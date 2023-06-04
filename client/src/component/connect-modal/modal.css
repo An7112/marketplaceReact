@@ -1,0 +1,47 @@
+
+.modal-frame {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0.856);
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+}
+
+.modal-frame .modal{
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateY(0%) translateX(-50%) rotateX(-25deg);
+    background: var(--bg-contrast);
+    width: 450px;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    text-align: center;
+    transition: all .8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.modal-frame .modal .icon-connect{
+    color:  var(--text-color);
+    font-size: 26px;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.modal-frame .modal p{
+    color: var(--text-color);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+@keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: .5;
+    }
+  }
